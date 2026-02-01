@@ -1,0 +1,52 @@
+name: Gradle CI with JaCoCo
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    name: Build, Test, and Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up JDK 17
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Step 3: Set up Gradle
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: '8.4' # Use the latest stable version
+
+      # Step 4: Run tests and generate JaCoCo report
+      - name: Run tests with coverage
+        run: ./gradlew test jacocoTestReport
+
+      # Step 5: Upload JaCoCo report as an artifact
+      - name: Upload JaCoCo report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: build/reports/jacoco/test/html
+
+      # Step 6: Build the project (only if tests pass)
+      - name: Build project
+        run: ./gradlew build
+
+      # Step 7: Upload build artifact
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: build/libs/
