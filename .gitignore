@@ -1,0 +1,16 @@
+# Gradle
+.gradle/
+build/
+gradle-*.zip              # ← Ignore any gradle zip files
+gradle-8.*/               # ← Ignore extracted gradle folders
+
+# Keep the wrapper jar (exception)
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store

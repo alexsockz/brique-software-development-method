@@ -3,27 +3,94 @@ plugins {
     id 'jacoco'
 }
 
+group = 'brique'
+version = '1.0-SNAPSHOT'
+
 repositories {
     mavenCentral()
 }
 
+// Define source sets
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['tests/tests/java']
+        }
+    }
+}
+
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+    // JUnit 5 dependencies
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
 }
 
-jacoco {
-    toolVersion = "0.8.11"
-    reportsDirectory = layout.buildDirectory.dir('jacocoReports')
-}
+// Configure Java version - USE THIS SYNTAX
+sourceCompatibility = '21'
+targetCompatibility = '21'
 
+// Configure test task to use JUnit 5
 test {
+    useJUnitPlatform()
+    
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+        showStandardStreams = false
+    }
+    
     finalizedBy jacocoTestReport
 }
 
+// Configure Jacoco
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+// Configure Jacoco test report
 jacocoTestReport {
     dependsOn test
+    
     reports {
         xml.required = true
         html.required = true
+        csv.required = false
+        
+        xml.outputLocation = file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        html.outputLocation = file("${buildDir}/reports/jacoco/test/html")
+    }
+    
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                // Add any exclusions here if needed
+            ])
+        }))
     }
 }
+
+// Optional: enforce minimum code coverage
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.80
+            }
+        }
+        
+        rule {
+            element = 'CLASS'
+            limit {
+                minimum = 0.70
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification

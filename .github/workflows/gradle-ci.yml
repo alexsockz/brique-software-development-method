@@ -16,35 +16,37 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
-      # Step 2: Set up JDK 17
+      # Step 2: Set up JDK 21 (matches your Gradle config)
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
 
-      # Step 3: Set up Gradle
+      # Step 3: Make gradlew executable (needed for GitHub Actions)
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      # Step 4: Set up Gradle (caches dependencies)
       - name: Set up Gradle
         uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: '8.4' # Use the latest stable version
 
-      # Step 4: Run tests and generate JaCoCo report
+      # Step 5: Run tests and generate JaCoCo report
       - name: Run tests with coverage
         run: ./gradlew test jacocoTestReport
 
-      # Step 5: Upload JaCoCo report as an artifact
+      # Step 6: Upload JaCoCo report as an artifact
       - name: Upload JaCoCo report
         uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
           path: build/reports/jacoco/test/html
 
-      # Step 6: Build the project (only if tests pass)
+      # Step 7: Build the project (only if tests pass)
       - name: Build project
         run: ./gradlew build
 
-      # Step 7: Upload build artifact
+      # Step 8: Upload build artifact
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
