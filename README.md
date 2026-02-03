@@ -16,3 +16,24 @@
 
 riassunto del riassunto, segui quello che dice
 https://refactoring.guru/
+
+
+
+APPUNTI ORGANIZZAZIONEhttps://use.ai/it/chat/b86742a1-9492-45a1-99cb-8ef7bf9885b7?id=YmluZ3xjcGN8SVQtSVQtRGVza3RvcC1TZWFyY2gtVXNlQUktQ2xhdWRlfDUyMzYyMDI0OHxjbGF1ZGV8fHwxMzI3MTEzMjY2NDAyMDQ1fElULUlULUNsYXVkZS1HZW5lcmljLUV4YWN0fHx8fHx8fHx8fA
+
+-ogni singola parte del gioco deve essere un oggetto a se stante per rispettare il concetto di SingleResponsibility
+
+exPosition
+
+DEVI FARE UNA CLASSE DI TUTTO TUTTO
+
+board con nxn squares che possono contenere una stone
+squares possono essere bianchi o neri quindi potrebbe essere utile isolarli, ma potrebbe essere una funzione della board dato che serve solo per analizzare gli escort
+stone che tiene se bianco o nero o non piazzata
+la posizione è uno stato separato penso
+
+avremo un interfaccia che decide le game rules per permettere polimorfismo
+
+il game engine prendera le game rules dall'interfaca e le applica 
+
+per selezionare le regole si usa una rule factory e un enumerate con le varie regole disponibili per creare l'oggetto delle regole
