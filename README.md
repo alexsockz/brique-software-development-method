@@ -18,9 +18,6 @@ riassunto del riassunto, segui quello che dice
 https://refactoring.guru/
 
 
-
-APPUNTI ORGANIZZAZIONEhttps://use.ai/it/chat/b86742a1-9492-45a1-99cb-8ef7bf9885b7?id=YmluZ3xjcGN8SVQtSVQtRGVza3RvcC1TZWFyY2gtVXNlQUktQ2xhdWRlfDUyMzYyMDI0OHxjbGF1ZGV8fHwxMzI3MTEzMjY2NDAyMDQ1fElULUlULUNsYXVkZS1HZW5lcmljLUV4YWN0fHx8fHx8fHx8fA
-
 -ogni singola parte del gioco deve essere un oggetto a se stante per rispettare il concetto di SingleResponsibility
 
 exPosition
