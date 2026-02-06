@@ -1,10 +1,5 @@
-package brique.engine;
+package brique.core;
 
-import brique.core.Board;
-import brique.core.GameState;
-import brique.core.Move;
-import brique.core.Position;
-import brique.core.Stone;
 import brique.rules.GameRules;
 import brique.rules.RuleType;
 import brique.rules.RulesFactory;
