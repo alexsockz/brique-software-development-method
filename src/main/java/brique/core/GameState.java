@@ -5,7 +5,7 @@ import java.util.List;
 
 //TODO create a relieve moveHistory, i guess as a new game engine that automatically expands to a certain point?
 public class GameState {
-    private enum GameEnd{
+    public enum GameEnd{
         IN_PROGRESS,
         BLACK_WON,
         WHITE_WON,
@@ -48,6 +48,26 @@ public class GameState {
 
     public GameEnd getStatus() {
         return status;
+    }
+
+    public void declareWinner(Stone winner) {
+        if (winner == Stone.BLACK) {
+            this.status = GameEnd.BLACK_WON;
+        } else if (winner == Stone.WHITE) {
+            this.status = GameEnd.WHITE_WON;
+        }
+    }
+
+    public void abort() {
+        this.status = GameEnd.ABORTED;
+    }
+
+    public boolean isInProgress() {
+        return this.status == GameEnd.IN_PROGRESS;
+    }
+
+    public List<Move> getMoveHistory() {
+        return java.util.Collections.unmodifiableList(moveHistory);
     }
 
     public boolean ispieRuleAvailable() {
