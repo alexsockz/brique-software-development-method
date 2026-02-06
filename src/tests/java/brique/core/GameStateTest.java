@@ -1,87 +1,103 @@
 package brique.core;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-class GameStateTest {
-    
-    private GameState gameState;
-    
+class GameStateEngineTest {
+
+    private GameState state;
+
     @BeforeEach
     void setUp() {
-        gameState = new GameState(8);
+        state = new GameState(5);
     }
-    
-    @Test
-    @DisplayName("Should initialize with BLACK as first player")
-    void shouldInitializeWithBlackAsFirstPlayer() {
-        assertThat(gameState.getCurrentPlayer()).isEqualTo(Stone.BLACK);
+
+    @Nested
+    @DisplayName("Initialisation Tests")
+    class InitialisationTests {
+        @Test
+        @DisplayName("Should start with Black to move and in-progress status")
+        void shouldStartWithBlackAndInProgressStatus() {
+            assertThat(state.getCurrentPlayer()).isEqualTo(Stone.BLACK);
+            assertThat(state.getStatus()).isEqualTo(GameState.GameEnd.IN_PROGRESS);
+            assertThat(state.ispieRuleAvailable()).isTrue();
+            assertThat(state.getBoard()).isNotNull();
+            assertThat(state.getBoard().getSize()).isEqualTo(5);
+        }
     }
-    
-    @Test
-    @DisplayName("Should initialize with IN_PROGRESS status")
-    void shouldInitializeWithInProgressStatus() {
-        assertThat(gameState.getStatus()).isEqualTo(GameStatus.IN_PROGRESS);
+
+    @Nested
+    @DisplayName("Player Switching Tests")
+    class PlayerSwitchingTests {
+        @Test
+        @DisplayName("Should alternate players correctly")
+        void shouldAlternatePlayersCorrectly() {
+            assertThat(state.getCurrentPlayer()).isEqualTo(Stone.BLACK);
+            state.switchPlayer();
+            assertThat(state.getCurrentPlayer()).isEqualTo(Stone.WHITE);
+            state.switchPlayer();
+            assertThat(state.getCurrentPlayer()).isEqualTo(Stone.BLACK);
+        }
     }
-    
-    @Test
-    @DisplayName("Should have pie rule available initially")
-    void shouldHavePieRuleAvailableInitially() {
-        assertThat(gameState.isPieRuleAvailable()).isTrue();
+
+    @Nested
+    @DisplayName("Pie Rule Tests")
+    class PieRuleTests {
+        @Test
+        @DisplayName("Should disable pie rule when turned off")
+        void shouldDisablePieRule() {
+            assertThat(state.ispieRuleAvailable()).isTrue();
+            state.turnOffPieRule();
+            assertThat(state.ispieRuleAvailable()).isFalse();
+        }
     }
-    
-    @Test
-    @DisplayName("Should switch player correctly")
-    void shouldSwitchPlayerCorrectly() {
-        assertThat(gameState.getCurrentPlayer()).isEqualTo(Stone.BLACK);
-        
-        gameState.switchPlayer();
-        assertThat(gameState.getCurrentPlayer()).isEqualTo(Stone.WHITE);
-        
-        gameState.switchPlayer();
-        assertThat(gameState.getCurrentPlayer()).isEqualTo(Stone.BLACK);
+
+    @Nested
+    @DisplayName("Status Transition Tests")
+    class StatusTransitionTests {
+        @Test
+        @DisplayName("Should declare winner correctly")
+        void shouldDeclareWinnerCorrectly() {
+            state.declareWinner(Stone.BLACK);
+            assertThat(state.getStatus()).isEqualTo(GameState.GameEnd.BLACK_WON);
+            state.declareWinner(Stone.WHITE);
+            assertThat(state.getStatus()).isEqualTo(GameState.GameEnd.WHITE_WON);
+        }
+
+        @Test
+        @DisplayName("Should abort game correctly")
+        void shouldAbortGameCorrectly() {
+            state.abort();
+            assertThat(state.getStatus()).isEqualTo(GameState.GameEnd.ABORTED);
+            assertThat(state.isInProgress()).isFalse();
+        }
     }
-    
-    @Test
-    @DisplayName("Should disable pie rule when set")
-    void shouldDisablePieRuleWhenSet() {
-        gameState.setPieRuleAvailable(false);
-        assertThat(gameState.isPieRuleAvailable()).isFalse();
-    }
-    
-    @Test
-    @DisplayName("Should change game status")
-    void shouldChangeGameStatus() {
-        gameState.setStatus(GameStatus.BLACK_WON);
-        assertThat(gameState.getStatus()).isEqualTo(GameStatus.BLACK_WON);
-    }
-    
-    @Test
-    @DisplayName("Should record moves in history")
-    void shouldRecordMovesInHistory() {
-        Move move1 = new Move(new Position(0, 0), Stone.BLACK);
-        Move move2 = new Move(new Position(1, 1), Stone.WHITE);
-        
-        MoveResult result1 = new MoveResult(move1);
-        MoveResult result2 = new MoveResult(move2);
-        
-        gameState.recordMove(result1);
-        gameState.recordMove(result2);
-        
-        assertThat(gameState.getMoveHistory()).hasSize(2);
-        assertThat(gameState.getMoveHistory().get(0)).isEqualTo(result1);
-        assertThat(gameState.getMoveHistory().get(1)).isEqualTo(result2);
-    }
-    
-    @Test
-    @DisplayName("Should provide access to board")
-    void shouldProvideAccessToBoard() {
-        Board board = gameState.getBoard();
-        
-        assertThat(board).isNotNull();
-        assertThat(board.getSize()).isEqualTo(8);
+
+    @Nested
+    @DisplayName("Move History Tests")
+    class MoveHistoryTests {
+        @Test
+        @DisplayName("Should record moves and expose unmodifiable history")
+        void shouldRecordMovesAndExposeUnmodifiableHistory() {
+            assertThat(state.getMoveHistory()).isEmpty();
+
+            Move m1 = new Move(new Position(1, 1), Stone.BLACK);
+            Move m2 = new Move(new Position(2, 2), Stone.WHITE);
+            state.recordMove(m1);
+            state.switchPlayer();
+            state.recordMove(m2);
+
+            assertThat(state.getMoveHistory()).hasSize(2);
+            assertThat(state.getMoveHistory().get(0)).isEqualTo(m1);
+            assertThat(state.getMoveHistory().get(1)).isEqualTo(m2);
+
+            // Attempting to modify the returned list should throw
+            assertThatThrownBy(() -> state.getMoveHistory().add(m1))
+                .isInstanceOf(UnsupportedOperationException.class);
+        }
     }
 }
