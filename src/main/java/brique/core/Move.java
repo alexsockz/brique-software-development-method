@@ -24,6 +24,14 @@ public class Move {
     public void addFilledPosition(Position pos) {
         filledPositions.add(pos);
     }
+
+    public List<Position> getCapturedPositions() {
+        return java.util.Collections.unmodifiableList(capturedPositions);
+    }
+    
+    public List<Position> getFilledPositions() {
+        return java.util.Collections.unmodifiableList(filledPositions);
+    }
     
     public Position getPosition() {
         return position;

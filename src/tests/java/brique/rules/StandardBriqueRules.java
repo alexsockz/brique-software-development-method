@@ -129,7 +129,7 @@ class StandardBriqueRulesTest {
             Position pos = new Position(3, 3);
             Move move = new Move(pos, Stone.BLACK);
             
-            rules.executeMove(gameState, move);
+            rules.ProcessMove(gameState, move);
             
             assertThat(gameState.getBoard().getStone(pos)).isEqualTo(Stone.BLACK);
         }
@@ -146,11 +146,11 @@ class StandardBriqueRulesTest {
             
             // Place stone that doesn't directly fill (2,2) but triggers check
             Move move = new Move(new Position(0, 0), Stone.BLACK);
-            MoveResult result = rules.executeMove(gameState, move);
+            rules.ProcessMove(gameState, move);
             
             // After the move, (2,2) should be filled
             assertThat(board.getStone(new Position(2, 2))).isEqualTo(Stone.BLACK);
-            assertThat(result.getFilledPositions()).contains(new Position(2, 2));
+            assertThat(move.getFilledPositions()).contains(new Position(2, 2));
         }
         
         @Test
@@ -167,10 +167,40 @@ class StandardBriqueRulesTest {
             board.setStone(new Position(2, 1), Stone.BLACK);
             
             Move move = new Move(new Position(0, 0), Stone.BLACK);
-            MoveResult result = rules.executeMove(gameState, move);
+            rules.ProcessMove(gameState, move);
             
-            assertThat(result.getCapturedPositions()).contains(toFill);
+            assertThat(move.getCapturedPositions()).contains(toFill);
             assertThat(board.getStone(toFill)).isEqualTo(Stone.BLACK);
+        }
+        
+        //from the pdf
+        @Test
+        @DisplayName("Should fill multiple escorted squares capturing blocking stone")
+        void shouldFillMultipleEscortedSquaresCapturingBlockingStone() {
+            Board board = gameState.getBoard();
+            // Two escorted squares: one empty, one occupied by WHITE
+            Position firstToFill = new Position(2, 2);   // light square escorts: (1,2) and (2,1)
+            Position secondToFill = new Position(4, 4);  // dark square escorts: (4,3) and (3,4)
+            // 0 1 2 3 4
+            //0- - - - -
+            //1- - B - - 
+            //2- B - - -
+            //3- - - - B
+            //4- - - B W
+
+            board.setStone(new Position(1, 2), Stone.BLACK);
+            board.setStone(new Position(2, 1), Stone.BLACK);
+            board.setStone(new Position(4, 3), Stone.BLACK);
+            board.setStone(new Position(3, 4), Stone.BLACK);
+            board.setStone(secondToFill, Stone.WHITE); // blocking stone that must be captured
+
+            Move move = new Move(new Position(0, 0), Stone.BLACK);
+            rules.ProcessMove(gameState, move);
+
+            assertThat(board.getStone(firstToFill)).isEqualTo(Stone.BLACK);
+            assertThat(board.getStone(secondToFill)).isEqualTo(Stone.BLACK);
+            assertThat(move.getFilledPositions()).contains(firstToFill, secondToFill);
+            assertThat(move.getCapturedPositions()).contains(secondToFill);
         }
     }
     
