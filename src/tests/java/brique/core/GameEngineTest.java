@@ -1,11 +1,4 @@
-package brique.engine;
-
-import brique.core.Board;
-import brique.core.GameState;
-import brique.core.Move;
-import brique.core.Position;
-import brique.core.Stone;
-import brique.rules.RuleType;
+package brique.core;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
