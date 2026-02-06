@@ -3,7 +3,7 @@ package brique.ui;
 import brique.core.GameState;
 import brique.core.Position;
 import brique.core.Stone;
-import brique.engine.GameEngine;
+import brique.core.GameEngine;
 
 public class BriqueCLI {
     private final GameEngine engine;
