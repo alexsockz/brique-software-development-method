@@ -88,12 +88,12 @@ public class GameEngine {
             }
         }
 
-        // Disable further use of the pie rule
+        // Disable further use of the pie rule and l
         state.turnOffPieRule();
-
-        // Do NOT switch the current player.  The second player has used her
-        // turn to swap colours and it is now the original first player's turn
-        // (who will play with the opposite colour)【99388471637534†L381-L402】.
+        // CHECK CORECT RULE
+        // if(state.getCurrentPlayer()==Stone.WHITE){
+        //     state.switchPlayer();
+        // }
     }
 
     public boolean isGameOver() {
