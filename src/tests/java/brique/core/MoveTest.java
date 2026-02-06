@@ -8,46 +8,44 @@ import static org.assertj.core.api.Assertions.*;
 class MoveTest {
     
     @Test
-    @DisplayName("Should create move result with primary move")
-    void shouldCreateMoveResultWithPrimaryMove() {
+    @DisplayName("Should create move with empty updates")
+    void shouldCreateMoveWithEmptyUpdates() {
         Move move = new Move(new Position(3, 3), Stone.BLACK);
-        MoveResult result = new MoveResult(move);
-        
-        assertThat(result.getPrimaryMove()).isEqualTo(move);
-        assertThat(result.getCapturedPositions()).isEmpty();
-        assertThat(result.getFilledPositions()).isEmpty();
+
+        assertThat(move.getPosition()).isEqualTo(new Position(3, 3));
+        assertThat(move.getStone()).isEqualTo(Stone.BLACK);
+        assertThat(move.getCapturedPositions()).isEmpty();
+        assertThat(move.getFilledPositions()).isEmpty();
     }
     
     @Test
-    @DisplayName("Should add captured positions")
+    @DisplayName("Should add captured positions to move")
     void shouldAddCapturedPositions() {
         Move move = new Move(new Position(3, 3), Stone.BLACK);
-        MoveResult result = new MoveResult(move);
         
         Position captured1 = new Position(2, 2);
         Position captured2 = new Position(4, 4);
         
-        result.addCapturedPosition(captured1);
-        result.addCapturedPosition(captured2);
+        move.addCapturedPosition(captured1);
+        move.addCapturedPosition(captured2);
         
-        assertThat(result.getCapturedPositions())
+        assertThat(move.getCapturedPositions())
             .hasSize(2)
             .contains(captured1, captured2);
     }
     
     @Test
-    @DisplayName("Should add filled positions")
+    @DisplayName("Should add filled positions to move")
     void shouldAddFilledPositions() {
         Move move = new Move(new Position(3, 3), Stone.BLACK);
-        MoveResult result = new MoveResult(move);
         
         Position filled1 = new Position(2, 3);
         Position filled2 = new Position(3, 2);
         
-        result.addFilledPosition(filled1);
-        result.addFilledPosition(filled2);
+        move.addFilledPosition(filled1);
+        move.addFilledPosition(filled2);
         
-        assertThat(result.getFilledPositions())
+        assertThat(move.getFilledPositions())
             .hasSize(2)
             .contains(filled1, filled2);
     }
