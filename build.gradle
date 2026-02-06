@@ -19,7 +19,7 @@ sourceSets {
     }
     test {
         java {
-            srcDirs = ['tests/tests/java']
+            srcDirs = ['src/tests/java']
         }
     }
 }
@@ -29,11 +29,17 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-engine:1.10.1'
+    
+    // AssertJ for fluent assertions
+    testImplementation 'org.assertj:assertj-core:3.24.1'
 }
 
-// Configure Java version - USE THIS SYNTAX
-sourceCompatibility = '21'
-targetCompatibility = '21'
+// Configure Java version using modern syntax
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
 
 // Configure test task to use JUnit 5
 test {
