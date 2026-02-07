@@ -5,14 +5,14 @@ import brique.core.Position;
 import brique.core.Stone;
 
 /**
- * Simple ASCII implementation of {@link BoardRenderer}.  Empty points
+ * Simple ASCII implementation of {@link BoardRendererInterface}.  Empty points
  * are represented by '.', black stones by 'B' and white stones by 'W'.
  * Row and column indices are printed to assist the user in specifying
  * coordinates.  This class follows the Open/Closed principle by
  * encapsulating the rendering logic; new styles can be added by
- * implementing {@link BoardRenderer} without modifying the CLI.
+ * implementing {@link BoardRendererInterface} without modifying the CLI.
  */
-public class AsciiBoardRenderer implements BoardRenderer {
+public class AsciiBoardRenderer implements BoardRendererInterface {
     @Override
     public String render(Board board) {
         int size = board.getSize();

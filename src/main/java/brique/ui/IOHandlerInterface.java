@@ -9,7 +9,7 @@ package brique.ui;
  * manipulating global state.  It exemplifies the Dependency Inversion
  * principle.
  */
-public interface IOHandler {
+public interface IOHandlerInterface {
     /**
      * Reads a single line of input from the underlying source.  If no more
      * input is available this may return {@code null}.

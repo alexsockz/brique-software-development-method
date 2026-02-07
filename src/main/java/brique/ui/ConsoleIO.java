@@ -12,7 +12,7 @@ import java.io.PrintWriter;
  * strategies for testing or alternate frontends.  It follows the
  * Dependency Inversion principle.
  */
-public class ConsoleIO implements IOHandler {
+public class ConsoleIO implements IOHandlerInterface {
     private final BufferedReader reader;
     private final PrintWriter writer;
 

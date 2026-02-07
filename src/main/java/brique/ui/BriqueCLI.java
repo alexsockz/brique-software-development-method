@@ -7,17 +7,17 @@ import brique.core.GameEngine;
 /**
  * Command‑line interface for playing a game of Brique.  This class
  * orchestrates user interaction by reading textual commands via an
- * {@link IOHandler}, rendering the board through a {@link BoardRenderer}
+ * {@link IOHandlerInterface}, rendering the board through a {@link BoardRendererInterface}
  * and delegating game logic to a {@link GameEngine}.  Following the
  * Single Responsibility principle, it does not implement game rules or
- * manage game state directly.  By depending on abstractions ({@link IOHandler}
- * and {@link BoardRenderer}) the CLI can be tested independently of
+ * manage game state directly.  By depending on abstractions ({@link IOHandlerInterface}
+ * and {@link BoardRendererInterface}) the CLI can be tested independently of
  * console I/O and display format (Dependency Inversion).
  */
 public class BriqueCLI {
     private final GameEngine engine;
-    private final IOHandler io;
-    private final BoardRenderer renderer;
+    private final IOHandlerInterface io;
+    private final BoardRendererInterface renderer;
     private volatile boolean running;
 
     /**
@@ -39,7 +39,7 @@ public class BriqueCLI {
      * @param io       the handler for reading and writing user interaction
      * @param renderer the renderer used to display the board
      */
-    public BriqueCLI(GameEngine engine, IOHandler io, BoardRenderer renderer) {
+    public BriqueCLI(GameEngine engine, IOHandlerInterface io, BoardRendererInterface renderer) {
         this.engine = engine;
         this.io = io;
         this.renderer = renderer;

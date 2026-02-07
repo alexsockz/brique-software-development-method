@@ -21,17 +21,18 @@ class StandardBriqueRulesTest {
         gameState = new GameState(8);
     }
     
+    @Test
+    @DisplayName("Should validate move on empty position")
+    void shouldValidateMoveOnEmptyPosition() {
+        Move move = new Move(new Position(3, 3), Stone.BLACK);
+        
+        assertThat(rules.isValidMove(gameState, move)).isTrue();
+    }
+    
     @Nested
     @DisplayName("Move Validation Tests")
     class MoveValidationTests {
         
-        @Test
-        @DisplayName("Should validate move on empty position")
-        void shouldValidateMoveOnEmptyPosition() {
-            Move move = new Move(new Position(3, 3), Stone.BLACK);
-            
-            assertThat(rules.isValidMove(gameState, move)).isTrue();
-        }
         
         @Test
         @DisplayName("Should reject move on occupied position")

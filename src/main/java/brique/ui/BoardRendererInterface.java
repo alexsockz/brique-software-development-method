@@ -8,7 +8,7 @@ import brique.core.Board;
  * the {@code BriqueCLI} to remain agnostic of the specific output
  * representation.
  */
-public interface BoardRenderer {
+public interface BoardRendererInterface {
     /**
      * Convert the given board into a multi‑line string suitable for
      * display to a human player.
