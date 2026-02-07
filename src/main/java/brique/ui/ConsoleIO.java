@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
-public class ConsoleIO implements IOHandler {
+public class ConsoleIO implements IOHandlerInterface {
     private final BufferedReader reader;
     private final PrintWriter writer;
 

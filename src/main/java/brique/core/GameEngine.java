@@ -91,9 +91,9 @@ public class GameEngine {
         // Disable further use of the pie rule and l
         state.turnOffPieRule();
         // CHECK CORECT RULE
-        // if(state.getCurrentPlayer()==Stone.WHITE){
-        //     state.switchPlayer();
-        // }
+        if(state.getCurrentPlayer()==Stone.WHITE){
+            state.switchPlayer();
+        }
     }
 
     public boolean isGameOver() {

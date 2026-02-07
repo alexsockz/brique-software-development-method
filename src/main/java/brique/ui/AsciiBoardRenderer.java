@@ -4,7 +4,7 @@ import brique.core.Board;
 import brique.core.Position;
 import brique.core.Stone;
 
-public class AsciiBoardRenderer implements BoardRenderer {
+public class AsciiBoardRenderer implements BoardRendererInterface {
     @Override
     public String render(Board board) {
         int size = board.getSize();

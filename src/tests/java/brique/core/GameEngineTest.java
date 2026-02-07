@@ -143,8 +143,8 @@ class GameEngineTest {
             assertThat(engine.getState().getBoard().getStone(firstMove)).isEqualTo(Stone.WHITE);
             // Pie rule should be disabled
             assertThat(engine.getState().ispieRuleAvailable()).isFalse();
-            // It should still be White's turn (original Black now plays as White)
-            assertThat(engine.getState().getCurrentPlayer()).isEqualTo(Stone.WHITE);
+            // It should still be Black's turn
+            assertThat(engine.getState().getCurrentPlayer()).isEqualTo(Stone.BLACK);
         }
 
         @Test

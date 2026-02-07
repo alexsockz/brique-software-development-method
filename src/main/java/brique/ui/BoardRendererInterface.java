@@ -2,6 +2,6 @@ package brique.ui;
 
 import brique.core.Board;
 
-public interface BoardRenderer {
+public interface BoardRendererInterface {
     String render(Board board);
 }

@@ -6,15 +6,15 @@ import brique.core.GameEngine;
 
 public class BriqueCLI {
     private final GameEngine engine;
-    private final IOHandler io;
-    private final BoardRenderer renderer;
+    private final IOHandlerInterface io;
+    private final BoardRendererInterface renderer;
     private volatile boolean running;
 
     public BriqueCLI(GameEngine engine) {
         this(engine, new ConsoleIO(), new AsciiBoardRenderer());
     }
 
-    public BriqueCLI(GameEngine engine, IOHandler io, BoardRenderer renderer) {
+    public BriqueCLI(GameEngine engine, IOHandlerInterface io, BoardRendererInterface renderer) {
         this.engine = engine;
         this.io = io;
         this.renderer = renderer;

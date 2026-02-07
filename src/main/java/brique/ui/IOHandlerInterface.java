@@ -1,6 +1,6 @@
 package brique.ui;
 
-public interface IOHandler {
+public interface IOHandlerInterface {
     String readLine();
 
     void writeLine(String message);
