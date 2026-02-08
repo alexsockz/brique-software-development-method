@@ -23,7 +23,6 @@ class BriqueCLITest {
         new BriqueCLI(engine, io, renderer).start();
 
         assertThat(engine.isGameOver()).isTrue();
-        assertThat(io.writes).anyMatch(s -> s.contains("Welcome to Brique!"));
         assertThat(io.writes).anyMatch(s -> s.contains("Game over. No winner."));
         assertThat(renderer.renderCount).isGreaterThanOrEqualTo(2); // at least loop + final
     }

@@ -9,16 +9,12 @@ public final class Main {
     }
 
     public static void main(String[] args) {
-        int size = 11;
-        if (args != null && args.length > 0) {
-            try {
-                size = Integer.parseInt(args[0]);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid board size provided; using default size of 11.");
+            if(args[0].equalsIgnoreCase("cli")) {
+                BriqueCLI cli = new BriqueCLI();
+                cli.start();
             }
-        }
-        GameEngine engine = new GameEngine(size);
-        BriqueCLI cli = new BriqueCLI(engine);
-        cli.start();
+            else {
+            System.out.println("GUI not yet implemented");
+            }
     }
 }

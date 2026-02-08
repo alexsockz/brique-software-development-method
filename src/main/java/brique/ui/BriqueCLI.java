@@ -10,8 +10,8 @@ public class BriqueCLI {
     private final BoardRendererInterface renderer;
     private volatile boolean running;
 
-    public BriqueCLI(GameEngine engine) {
-        this(engine, new ConsoleIO(), new AsciiBoardRenderer());
+    public BriqueCLI() {
+        this(new ConsoleIO(), new AsciiBoardRenderer());
     }
 
     public BriqueCLI(GameEngine engine, IOHandlerInterface io, BoardRendererInterface renderer) {
@@ -21,15 +21,34 @@ public class BriqueCLI {
         this.running = false;
     }
 
+    public BriqueCLI(IOHandlerInterface io, BoardRendererInterface renderer) {
+        int size = 11;
+        System.out.println("Welcome to Brique! please enter board size:");
+        String input = io.readLine();
+        if (input != null && input.isEmpty()) {
+            try {
+                size = Integer.parseInt(input);
+                
+                if(size<=0){throw new NumberFormatException("non positive num");}
+
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid board size provided; using default size of 11.");
+            }
+        }
+        this.engine = new GameEngine(size);
+        this.io = io;
+        this.renderer = renderer;
+        this.running = false;
+    }
+
     public void start() {
         running = true;
-        io.writeLine("Welcome to Brique!");
         while (running && !engine.isGameOver()) {
             // Show the current state of the board
             io.writeLine(renderer.render(engine.getState().getBoard()));
             // Prompt the user for action
             Stone current = engine.getState().getCurrentPlayer();
-            if (current == Stone.WHITE && engine.getState().ispieRuleAvailable()) {
+            if (current == Stone.WHITE && engine.getState().isPieRuleAvailable()) {
                 io.writeLine("Current player: WHITE (swap available)");
                 io.writeLine("Enter 'swap' to apply pie rule or specify move as 'row col', or 'quit' to exit:");
             } else {
@@ -49,7 +68,7 @@ public class BriqueCLI {
             }
             if (input.equalsIgnoreCase("swap")) {
                 try {
-                    engine.applyPieRule();
+                    engine.getState().applyPieRule();
                 } catch (Exception e) {
                     io.writeLine("Cannot apply pie rule: " + e.getMessage());
                 }
@@ -83,11 +102,14 @@ public class BriqueCLI {
                 io.writeLine("Invalid numbers. Please enter numeric row and column.");
             }
         }
+        concludeGame();
+    }
 
+    public void concludeGame() {
         // Game concluded: display final state and winner if any
         io.writeLine(renderer.render(engine.getState().getBoard()));
         if (engine.isGameOver()) {
-            Stone winner = engine.getWinner();
+            Stone winner = engine.getState().getWinner();
             if (winner != Stone.EMPTY) {
                 io.writeLine("Game over. Winner: " + winner);
             } else {

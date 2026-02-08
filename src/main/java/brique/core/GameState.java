@@ -3,14 +3,11 @@ package brique.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import brique.rules.GameRules;
+
 //TODO create a relieve moveHistory, i guess as a new game engine that automatically expands to a certain point?
 public class GameState {
-    public enum GameEnd{
-        IN_PROGRESS,
-        BLACK_WON,
-        WHITE_WON,
-        ABORTED
-    }
+
     private final Board board;
     private Stone currentPlayer;
     private GameEnd status;
@@ -66,11 +63,37 @@ public class GameState {
         return this.status == GameEnd.IN_PROGRESS;
     }
 
+    public void applyPieRule() {
+        // Ensure the swap may occur only at the correct time
+        if (!this.isInProgress()) {
+            throw new IllegalStateException("Cannot apply pie rule after the game has ended");
+        }
+        if (!this.isPieRuleAvailable() || this.getCurrentPlayer() != Stone.WHITE) {
+            throw new IllegalStateException("Pie rule can only be used by White on her first turn");
+        }
+
+        this.board.setStone(this.moveHistory.get(0).getPosition(), currentPlayer);
+
+        this.turnOffPieRule();
+        if(this.getCurrentPlayer()==Stone.WHITE){
+            this.switchPlayer();
+        }
+    }
     public List<Move> getMoveHistory() {
         return java.util.Collections.unmodifiableList(moveHistory);
     }
 
-    public boolean ispieRuleAvailable() {
+    public boolean isPieRuleAvailable() {
         return pieRuleAvailable;
+    }
+    public Stone getWinner() {
+        switch (this.status) {
+            case BLACK_WON:
+                return Stone.BLACK;
+            case WHITE_WON:
+                return Stone.WHITE;
+            default:
+                return Stone.EMPTY;
+        }
     }
 }

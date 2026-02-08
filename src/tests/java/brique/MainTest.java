@@ -18,11 +18,11 @@ class MainTest {
 
 		PrintStream originalOut = System.out;
 		java.io.InputStream originalIn = System.in;
-		try {
+		try (PrintStream ps = new PrintStream(out, true, StandardCharsets.UTF_8)) {
 			System.setIn(in);
-			System.setOut(new PrintStream(out, true, StandardCharsets.UTF_8));
+			System.setOut(ps);
 
-			Main.main(new String[]{});
+			Main.main(new String[]{"cli"});
 
 			String output = out.toString(StandardCharsets.UTF_8);
 			assertThat(output).contains("Welcome to Brique!");
@@ -34,16 +34,16 @@ class MainTest {
 
 	@Test
 	void shouldReportInvalidBoardSizeAndFallbackToDefault() {
-		ByteArrayInputStream in = new ByteArrayInputStream(new byte[0]);
+		ByteArrayInputStream in = new ByteArrayInputStream("\n".getBytes(StandardCharsets.UTF_8));
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		PrintStream originalOut = System.out;
 		java.io.InputStream originalIn = System.in;
-		try {
+		try (PrintStream ps = new PrintStream(out, true, StandardCharsets.UTF_8)) {
 			System.setIn(in);
-			System.setOut(new PrintStream(out, true, StandardCharsets.UTF_8));
+			System.setOut(ps);
 
-			Main.main(new String[]{"not-a-number"});
+			Main.main(new String[]{"cli"});
 
 			String output = out.toString(StandardCharsets.UTF_8);
 			assertThat(output)

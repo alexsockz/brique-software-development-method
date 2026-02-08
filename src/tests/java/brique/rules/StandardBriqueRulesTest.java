@@ -130,7 +130,7 @@ class StandardBriqueRulesTest {
             Position pos = new Position(3, 3);
             Move move = new Move(pos, Stone.BLACK);
             
-            rules.ProcessMove(gameState, move);
+            rules.processMove(gameState, move);
             
             assertThat(gameState.getBoard().getStone(pos)).isEqualTo(Stone.BLACK);
         }
@@ -147,7 +147,7 @@ class StandardBriqueRulesTest {
             
             // Place stone that doesn't directly fill (2,2) but triggers check
             Move move = new Move(new Position(0, 0), Stone.BLACK);
-            rules.ProcessMove(gameState, move);
+            rules.processMove(gameState, move);
             
             // After the move, (2,2) should be filled
             assertThat(board.getStone(new Position(2, 2))).isEqualTo(Stone.BLACK);
@@ -168,7 +168,7 @@ class StandardBriqueRulesTest {
             board.setStone(new Position(2, 1), Stone.BLACK);
             
             Move move = new Move(new Position(0, 0), Stone.BLACK);
-            rules.ProcessMove(gameState, move);
+            rules.processMove(gameState, move);
             
             assertThat(move.getCapturedPositions()).contains(toFill);
             assertThat(board.getStone(toFill)).isEqualTo(Stone.BLACK);
@@ -196,7 +196,7 @@ class StandardBriqueRulesTest {
             board.setStone(secondToFill, Stone.WHITE); // blocking stone that must be captured
 
             Move move = new Move(new Position(0, 0), Stone.BLACK);
-            rules.ProcessMove(gameState, move);
+            rules.processMove(gameState, move);
 
             assertThat(board.getStone(firstToFill)).isEqualTo(Stone.BLACK);
             assertThat(board.getStone(secondToFill)).isEqualTo(Stone.BLACK);

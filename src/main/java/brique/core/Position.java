@@ -1,5 +1,5 @@
 package brique.core;
-//TODO maybe substitute with simply putting row and col in the function because this is too much separation ??
+
 public class Position {
     private final int row;
     private final int col;
@@ -30,5 +30,9 @@ public class Position {
     @Override
     public int hashCode() {
         return 31 * row + col;
+    }
+    @Override
+    public String toString() {
+        return "("+row+", "+col+")";
     }
 }

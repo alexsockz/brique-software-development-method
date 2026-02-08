@@ -27,7 +27,7 @@ class GameEngineTest {
             assertThat(state.getBoard()).isNotNull();
             assertThat(state.getBoard().getSize()).isEqualTo(4);
             assertThat(state.getCurrentPlayer()).isEqualTo(Stone.BLACK);
-            assertThat(state.ispieRuleAvailable()).isTrue();
+            assertThat(state.isPieRuleAvailable()).isTrue();
         }
     }
 
@@ -113,7 +113,7 @@ class GameEngineTest {
 
             // Assert: game should be over and Black should be winner
             assertThat(engine.isGameOver()).isTrue();
-            assertThat(engine.getWinner()).isEqualTo(Stone.BLACK);
+            assertThat(engine.getState().getWinner()).isEqualTo(Stone.BLACK);
 
             // Subsequent attempts to play should throw
             assertThatThrownBy(() -> engine.playMove(new Position(2, 2)))
@@ -134,15 +134,15 @@ class GameEngineTest {
 
             // Now it's White's first turn and pie rule is available
             assertThat(engine.getState().getCurrentPlayer()).isEqualTo(Stone.WHITE);
-            assertThat(engine.getState().ispieRuleAvailable()).isTrue();
+            assertThat(engine.getState().isPieRuleAvailable()).isTrue();
 
             // Apply pie rule
-            engine.applyPieRule();
+            engine.getState().applyPieRule();
 
             // The stone at (1,1) should now be White after swap
             assertThat(engine.getState().getBoard().getStone(firstMove)).isEqualTo(Stone.WHITE);
             // Pie rule should be disabled
-            assertThat(engine.getState().ispieRuleAvailable()).isFalse();
+            assertThat(engine.getState().isPieRuleAvailable()).isFalse();
             // It should still be Black's turn
             assertThat(engine.getState().getCurrentPlayer()).isEqualTo(Stone.BLACK);
         }
@@ -151,7 +151,7 @@ class GameEngineTest {
         @DisplayName("Should not allow pie rule before any move")
         void shouldNotAllowPieRuleBeforeAnyMove() {
             // It is Black's turn; applying pie rule should throw because only White can swap on first turn
-            assertThatThrownBy(() -> engine.applyPieRule())
+            assertThatThrownBy(() -> engine.getState().applyPieRule())
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Pie rule");
         }
@@ -164,9 +164,9 @@ class GameEngineTest {
             // White plays instead of swapping
             assertThat(engine.playMove(new Position(1, 1))).isTrue();
             // Pie rule should now be disabled
-            assertThat(engine.getState().ispieRuleAvailable()).isFalse();
+            assertThat(engine.getState().isPieRuleAvailable()).isFalse();
             // Attempting to apply pie rule should fail
-            assertThatThrownBy(() -> engine.applyPieRule())
+            assertThatThrownBy(() -> engine.getState().applyPieRule())
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Pie rule");
         }
@@ -177,9 +177,9 @@ class GameEngineTest {
             // First move
             assertThat(engine.playMove(new Position(2, 2))).isTrue();
             // Apply pie rule
-            engine.applyPieRule();
+            engine.getState().applyPieRule();
             // Attempt to apply again should fail
-            assertThatThrownBy(() -> engine.applyPieRule())
+            assertThatThrownBy(() -> engine.getState().applyPieRule())
                 .isInstanceOf(IllegalStateException.class);
         }
     }
