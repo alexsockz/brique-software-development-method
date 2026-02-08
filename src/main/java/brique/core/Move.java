@@ -2,8 +2,7 @@ package brique.core;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//TODO maybe separate position and stone into a separate class Move
+//might be a good idea to create a builder, but maybe it's just overcomplicating it
 public class Move {
     private final Position position;
     private final Stone stone;
@@ -23,6 +22,14 @@ public class Move {
     
     public void addFilledPosition(Position pos) {
         filledPositions.add(pos);
+    }
+
+    public List<Position> getCapturedPositions() {
+        return java.util.Collections.unmodifiableList(capturedPositions);
+    }
+    
+    public List<Position> getFilledPositions() {
+        return java.util.Collections.unmodifiableList(filledPositions);
     }
     
     public Position getPosition() {

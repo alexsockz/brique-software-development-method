@@ -29,6 +29,12 @@ class BoardTest {
         void shouldCreateBoardWithCorrectSize() {
             assertEquals(DEFAULT_SIZE, board.getSize());
         }
+
+        @Test
+        @DisplayName("Should throw exception for negative size")
+        void noBoardWithNegativeSize() {
+            assertThrows(IllegalStateException.class, () -> new Board(-1));
+        }
         
         @ParameterizedTest
         @ValueSource(ints = {9, 13, 19, 21})

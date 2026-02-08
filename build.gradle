@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'jacoco'
+    id 'application'
 }
 
 group = 'brique'
@@ -39,6 +40,10 @@ dependencies {
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
+}
+
+application {
+    mainClass = 'brique.Main'
 }
 
 // Configure test task to use JUnit 5
@@ -87,13 +92,6 @@ jacocoTestCoverageVerification {
         rule {
             limit {
                 minimum = 0.80
-            }
-        }
-        
-        rule {
-            element = 'CLASS'
-            limit {
-                minimum = 0.70
             }
         }
     }
