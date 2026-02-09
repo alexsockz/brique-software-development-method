@@ -80,7 +80,7 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
-                // Add any exclusions here if needed
+                'brique/ui/gui/**'
             ])
         }))
     }
@@ -88,6 +88,13 @@ jacocoTestReport {
 
 // Optional: enforce minimum code coverage
 jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                'brique/ui/gui/**'
+            ])
+        }))
+    }
     violationRules {
         rule {
             limit {

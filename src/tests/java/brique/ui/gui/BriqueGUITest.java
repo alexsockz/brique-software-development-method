@@ -37,7 +37,7 @@ class BriqueGUITest {
     @Test
     void addsObserverOnConstruction() {
         BoardTheme theme = BoardTheme.defaultTheme();
-        TestGameEngine engine = new TestGameEngine(5);
+        brique.core.GameEngine engine = new brique.core.GameEngine(5);
         TestGameController controller = new TestGameController(engine);
 
         BriqueGUI gui = new BriqueGUI(controller, theme);
@@ -48,7 +48,7 @@ class BriqueGUITest {
     @Test
     void boardClickDelegatesSubmitInput() throws Exception {
         BoardTheme theme = BoardTheme.defaultTheme();
-        TestGameEngine engine = new TestGameEngine(5);
+        brique.core.GameEngine engine = new brique.core.GameEngine(5);
         TestGameController controller = new TestGameController(engine);
         controller.running = true;
         BriqueGUI gui = new BriqueGUI(controller, theme);
@@ -79,7 +79,7 @@ class BriqueGUITest {
     @Test
     void swapButtonWhenEnabledSubmitsSwap() throws Exception {
         BoardTheme theme = BoardTheme.defaultTheme();
-        TestGameEngine engine = new TestGameEngine(4);
+        brique.core.GameEngine engine = new brique.core.GameEngine(4);
         TestGameController controller = new TestGameController(engine);
         controller.running = true;
         BriqueGUI gui = new BriqueGUI(controller, theme);
@@ -106,7 +106,7 @@ class BriqueGUITest {
     @Test
     void newGameButtonStopsAndStartsGame() throws Exception {
         BoardTheme theme = BoardTheme.defaultTheme();
-        TestGameEngine engine = new TestGameEngine(3);
+        brique.core.GameEngine engine = new brique.core.GameEngine(3);
         TestGameController controller = new TestGameController(engine);
         controller.running = true;
 
@@ -136,7 +136,7 @@ class BriqueGUITest {
     @Test
     void onGameStartedConfiguresBoardPanelAndLogs() throws Exception {
         BoardTheme theme = BoardTheme.defaultTheme();
-        TestGameEngine engine = new TestGameEngine(6);
+        brique.core.GameEngine engine = new brique.core.GameEngine(6);
         TestGameController controller = new TestGameController(engine);
         controller.running = true;
         BriqueGUI gui = new BriqueGUI(controller, theme);
@@ -164,7 +164,7 @@ class BriqueGUITest {
     @Test
     void onStateChangedUpdatesLabelsAndButtons() throws Exception {
         BoardTheme theme = BoardTheme.defaultTheme();
-        TestGameEngine engine = new TestGameEngine(5);
+        brique.core.GameEngine engine = new brique.core.GameEngine(5);
         TestGameController controller = new TestGameController(engine);
         controller.running = true;
         BriqueGUI gui = new BriqueGUI(controller, theme);
@@ -182,7 +182,9 @@ class BriqueGUITest {
         Field previewField = BriqueGUI.class.getDeclaredField("stonePreview");
         previewField.setAccessible(true);
         StonePreviewPanel preview = (StonePreviewPanel) previewField.get(gui);
-        Assertions.assertThat(preview.currentPlayer).isEqualTo(Stone.BLACK);
+        Field cpPreviewField = StonePreviewPanel.class.getDeclaredField("currentPlayer");
+        cpPreviewField.setAccessible(true);
+        Assertions.assertThat(cpPreviewField.get(preview)).isEqualTo(Stone.BLACK);
 
         // Board panel current player should also be updated
         Field boardField = BriqueGUI.class.getDeclaredField("boardPanel");
@@ -204,7 +206,7 @@ class BriqueGUITest {
     @Test
     void onMoveExecutedSetsHighlights() throws Exception {
         BoardTheme theme = BoardTheme.defaultTheme();
-        TestGameEngine engine = new TestGameEngine(5);
+        brique.core.GameEngine engine = new brique.core.GameEngine(5);
         TestGameController controller = new TestGameController(engine);
         controller.running = true;
         BriqueGUI gui = new BriqueGUI(controller, theme);
@@ -247,7 +249,7 @@ class BriqueGUITest {
     @Test
     void onPieRuleAppliedClearsHighlights() throws Exception {
         BoardTheme theme = BoardTheme.defaultTheme();
-        TestGameEngine engine = new TestGameEngine(5);
+        brique.core.GameEngine engine = new brique.core.GameEngine(5);
         TestGameController controller = new TestGameController(engine);
         controller.running = true;
         BriqueGUI gui = new BriqueGUI(controller, theme);
@@ -286,7 +288,7 @@ class BriqueGUITest {
     @Test
     void onGameOverDisplaysWinnerMessage() throws Exception {
         BoardTheme theme = BoardTheme.defaultTheme();
-        TestGameEngine engine = new TestGameEngine(5);
+        brique.core.GameEngine engine = new brique.core.GameEngine(5);
         TestGameController controller = new TestGameController(engine);
         controller.running = true;
         BriqueGUI gui = new BriqueGUI(controller, theme);
@@ -308,7 +310,7 @@ class BriqueGUITest {
     @Test
     void onMessageAppendsToLog() throws Exception {
         BoardTheme theme = BoardTheme.defaultTheme();
-        TestGameEngine engine = new TestGameEngine(5);
+        brique.core.GameEngine engine = new brique.core.GameEngine(5);
         TestGameController controller = new TestGameController(engine);
         controller.running = true;
         BriqueGUI gui = new BriqueGUI(controller, theme);
@@ -335,97 +337,24 @@ class BriqueGUITest {
  * verification.
  */
 
-interface GameStateObserver {
-    default void onGameStarted(int boardSize) {}
-    default void onBoardUpdated() {}
-    default void onStateChanged(Stone currentPlayer, boolean pieRuleAvailable,
-                                boolean inProgress, int moveCount) {}
-    default void onMoveExecuted(Position pos, Stone player,
-                                Set<Position> filled,
-                                Set<Position> captured) {}
-    default void onPieRuleApplied() {}
-    default void onGameOver(Stone winner) {}
-    default void onMessage(String message) {}
-}
+// Removed: using the real GameStateObserver from production code
 
-interface GameEngine {
-    GameState getState();
-}
-
-interface GameController {
-    void addObserver(GameStateObserver observer);
-    boolean isRunning();
-    void submitInput(String input);
-    void stopGame();
-    void startNewGame(int size);
-    GameEngine getEngine();
-}
-
-class UIComponentFactory {
-    private final BoardTheme theme;
-    UIComponentFactory(BoardTheme theme) {
-        this.theme = theme;
-    }
-    JTextArea createLogArea() {
-        JTextArea area = new JTextArea();
-        area.setEditable(false);
-        return area;
-    }
-    JLabel createStatusLabel(String text) {
-        return new JLabel(text);
-    }
-    JLabel createTurnIndicator() {
-        return new JLabel();
-    }
-    StonePreviewPanel createStonePreview() {
-        return new StonePreviewPanel();
-    }
-    JButton createStyledButton(String text, Color color) {
-        JButton b = new JButton(text);
-        b.setBackground(color);
-        return b;
-    }
-    JPanel createLegendPanel() {
-        return new JPanel();
-    }
-    JScrollPane createLogScrollPane(JTextArea area) {
-        return new JScrollPane(area);
-    }
-}
-
-class StonePreviewPanel extends JPanel {
-    Stone currentPlayer = Stone.BLACK;
-    void setCurrentPlayer(Stone player) {
-        this.currentPlayer = player;
-    }
-}
-
-class TestGameEngine implements GameEngine {
-    private final GameState state;
-    TestGameEngine(int size) {
-        this.state = new GameState(size);
-    }
-    @Override
-    public GameState getState() {
-        return state;
-    }
-}
-
-class TestGameController implements GameController {
-    private final GameEngine engine;
+class TestGameController extends GameController {
+    private final brique.core.GameEngine testEngine;
     GameStateObserver addedObserver;
     final List<String> submittedInputs = new ArrayList<>();
     boolean running = false;
     boolean stopCalled = false;
     int startNewGameSize = -1;
 
-    TestGameController(GameEngine engine) {
-        this.engine = engine;
+    TestGameController(brique.core.GameEngine engine) {
+        this.testEngine = engine;
     }
 
     @Override
     public void addObserver(GameStateObserver observer) {
         this.addedObserver = observer;
+        super.addObserver(observer);
     }
 
     @Override
@@ -451,7 +380,7 @@ class TestGameController implements GameController {
     }
 
     @Override
-    public GameEngine getEngine() {
-        return engine;
+    public brique.core.GameEngine getEngine() {
+        return testEngine;
     }
 }

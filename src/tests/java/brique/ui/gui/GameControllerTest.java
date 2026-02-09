@@ -108,28 +108,3 @@ public class GameControllerTest {
         Assertions.assertThat(queue).isEmpty();
     }
 }
-
-/* ------------------------------------------------------------------------
- * Test support definitions
- *
- * A minimal observer interface is defined here because the production
- * implementation of GameStateObserver is not available in this test
- * compilation unit.  Only the methods required for type compatibility
- * with {@link GameController#addObserver} and
- * {@link GameController#removeObserver} are declared.  Each method
- * carries a default no-op implementation so test cases need not
- * implement all observer callbacks.
- */
-
-interface GameStateObserver {
-    default void onGameStarted(int boardSize) {}
-    default void onBoardUpdated() {}
-    default void onStateChanged(Object currentPlayer, boolean pieRuleAvailable,
-                                boolean inProgress, int moveCount) {}
-    default void onMoveExecuted(Object pos, Object player,
-                                java.util.Set<Object> filled,
-                                java.util.Set<Object> captured) {}
-    default void onPieRuleApplied() {}
-    default void onGameOver(Object winner) {}
-    default void onMessage(String message) {}
-}
