@@ -1,8 +1,9 @@
-package brique.ui;
+package brique.ui.cli;
 
 import brique.core.Board;
 import brique.core.Position;
 import brique.core.Stone;
+
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

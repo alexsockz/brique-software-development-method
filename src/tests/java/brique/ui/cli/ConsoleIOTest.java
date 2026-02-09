@@ -1,4 +1,4 @@
-package brique.ui;
+package brique.ui.cli;
 
 import org.junit.jupiter.api.Test;
 
