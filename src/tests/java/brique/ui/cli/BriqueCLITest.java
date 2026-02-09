@@ -1,8 +1,12 @@
-package brique.ui;
+package brique.ui.cli;
 
 import brique.core.GameEngine;
 import brique.core.Position;
 import brique.core.Stone;
+import brique.ui.BoardRendererInterface;
+import brique.ui.IOHandlerInterface;
+import brique.ui.cli.BriqueCLI;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayDeque;
