@@ -37,7 +37,7 @@ public class StandardBriqueRules implements GameRules {
     }
     
     @Override
-    public void ProcessMove(GameState state, Move move) {
+    public void processMove(GameState state, Move move) {
         Board board = state.getBoard();
         
         // Place the primary stone

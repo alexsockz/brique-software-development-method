@@ -6,8 +6,6 @@ public class RulesFactory {
             case STANDARD:
                 return new StandardBriqueRules();
             // Future: Add more rule variants
-            // case VARIANT_1:
-            //     return new VariantRules();
             default:
                 throw new IllegalArgumentException("Unknown rule type: " + type);
         }

@@ -23,8 +23,8 @@ class GameStateEngineTest {
         @DisplayName("Should start with Black to move and in-progress status")
         void shouldStartWithBlackAndInProgressStatus() {
             assertThat(state.getCurrentPlayer()).isEqualTo(Stone.BLACK);
-            assertThat(state.getStatus()).isEqualTo(GameState.GameEnd.IN_PROGRESS);
-            assertThat(state.ispieRuleAvailable()).isTrue();
+            assertThat(state.getStatus()).isEqualTo(GameEnd.IN_PROGRESS);
+            assertThat(state.isPieRuleAvailable()).isTrue();
             assertThat(state.getBoard()).isNotNull();
             assertThat(state.getBoard().getSize()).isEqualTo(5);
         }
@@ -50,9 +50,9 @@ class GameStateEngineTest {
         @Test
         @DisplayName("Should disable pie rule when turned off")
         void shouldDisablePieRule() {
-            assertThat(state.ispieRuleAvailable()).isTrue();
+            assertThat(state.isPieRuleAvailable()).isTrue();
             state.turnOffPieRule();
-            assertThat(state.ispieRuleAvailable()).isFalse();
+            assertThat(state.isPieRuleAvailable()).isFalse();
         }
     }
 
@@ -63,16 +63,16 @@ class GameStateEngineTest {
         @DisplayName("Should declare winner correctly")
         void shouldDeclareWinnerCorrectly() {
             state.declareWinner(Stone.BLACK);
-            assertThat(state.getStatus()).isEqualTo(GameState.GameEnd.BLACK_WON);
+            assertThat(state.getStatus()).isEqualTo(GameEnd.BLACK_WON);
             state.declareWinner(Stone.WHITE);
-            assertThat(state.getStatus()).isEqualTo(GameState.GameEnd.WHITE_WON);
+            assertThat(state.getStatus()).isEqualTo(GameEnd.WHITE_WON);
         }
 
         @Test
         @DisplayName("Should abort game correctly")
         void shouldAbortGameCorrectly() {
             state.abort();
-            assertThat(state.getStatus()).isEqualTo(GameState.GameEnd.ABORTED);
+            assertThat(state.getStatus()).isEqualTo(GameEnd.ABORTED);
             assertThat(state.isInProgress()).isFalse();
         }
     }

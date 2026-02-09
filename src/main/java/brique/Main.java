@@ -1,7 +1,12 @@
 package brique;
 
-import brique.core.GameEngine;
-import brique.ui.BriqueCLI;
+import brique.ui.cli.BriqueCLI;
+import brique.ui.gui.BoardTheme;
+import brique.ui.gui.BriqueGUI;
+import brique.ui.gui.GameController;
+
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 public final class Main {
     private Main() {
@@ -9,16 +14,24 @@ public final class Main {
     }
 
     public static void main(String[] args) {
-        int size = 11;
-        if (args != null && args.length > 0) {
-            try {
-                size = Integer.parseInt(args[0]);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid board size provided; using default size of 11.");
-            }
+        if (args != null && args.length > 0 && args[0].equalsIgnoreCase("cli")) {
+            BriqueCLI cli = new BriqueCLI();
+            cli.start();
+        } else {
+            SwingUtilities.invokeLater(() -> {
+                try {
+                    UIManager.setLookAndFeel(
+                        UIManager.getSystemLookAndFeelClassName());
+                } catch (Exception ignored) { }
+
+                // Composition root: wire dependencies
+                BoardTheme theme          = BoardTheme.defaultTheme();
+                GameController controller = new GameController();
+                BriqueGUI gui             = new BriqueGUI(controller, theme);
+
+                gui.setVisible(true);
+                gui.promptAndStartGame();
+            });
         }
-        GameEngine engine = new GameEngine(size);
-        BriqueCLI cli = new BriqueCLI(engine);
-        cli.start();
     }
 }

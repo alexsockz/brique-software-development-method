@@ -1,10 +1,13 @@
 package brique.core;
-//TODO pos is used only for 
+
 public class Board {
     private final int size;
     private final Stone[][] grid;
     
     public Board(int size) {
+        if (size<=0){
+            throw new IllegalStateException("0 or negative size boards can't exist");
+        }
         this.size = size;
         this.grid = new Stone[size][size];
         initializeEmpty();

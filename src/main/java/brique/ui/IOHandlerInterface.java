@@ -1,6 +1,8 @@
 package brique.ui;
 
-public interface IOHandler {
+import brique.ui.cli.BriqueCLI;
+
+public interface IOHandlerInterface {
     String readLine();
 
     void writeLine(String message);
