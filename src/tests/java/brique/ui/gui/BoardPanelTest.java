@@ -27,7 +27,7 @@ class BoardPanelTest {
         @Test
         @DisplayName("Should fire click listener with correct row and column")
         void shouldFireClickListenerWithCorrectCell() {
-            BoardTheme theme = new BoardTheme();
+            BoardTheme theme = BoardTheme.defaultTheme();
             BoardPanel panel = new BoardPanel(theme);
             panel.setSize(PANEL_SIZE, PANEL_SIZE);
             GameState state = new GameState(5);
@@ -66,7 +66,7 @@ class BoardPanelTest {
         @Test
         @DisplayName("Should ignore clicks outside the board grid")
         void shouldIgnoreClicksOutsideBoard() {
-            BoardTheme theme = new BoardTheme();
+            BoardTheme theme = BoardTheme.defaultTheme();
             BoardPanel panel = new BoardPanel(theme);
             panel.setSize(PANEL_SIZE, PANEL_SIZE);
             GameState state = new GameState(5);
@@ -93,7 +93,7 @@ class BoardPanelTest {
         @Test
         @DisplayName("Should adapt coordinate mapping when game state changes board size")
         void shouldAdaptCoordinateMappingOnGameStateChange() {
-            BoardTheme theme = new BoardTheme();
+            BoardTheme theme = BoardTheme.defaultTheme();
             BoardPanel panel = new BoardPanel(theme);
             panel.setSize(PANEL_SIZE, PANEL_SIZE);
 

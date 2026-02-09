@@ -1,11 +1,13 @@
-package brique.ui;
+package brique.ui.gui;
+
+import brique.ui.IOHandlerInterface;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class TestIO implements IOHandler {
+public class TestIO implements IOHandlerInterface {
     private final Queue<String> inputs = new LinkedList<>();
     private final List<String> outputs = new ArrayList<>();
 
