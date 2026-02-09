@@ -3,9 +3,6 @@ package brique.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import brique.rules.GameRules;
-
-//TODO create a relieve moveHistory, i guess as a new game engine that automatically expands to a certain point?
 public class GameState {
 
     private final Board board;

@@ -42,7 +42,7 @@ public class GameEngine {
         // Record the move in the state for history tracking
         state.recordMove(move);
 
-        // Check if the current player has won by connecting their edges【215399881283417†L30-L32】.
+        // Check if the current player has won by connecting their edges.
         if (rules.checkWinCondition(state, player)) {
             state.declareWinner(player);
             return true;
@@ -51,7 +51,7 @@ public class GameEngine {
         // If the move was White's first turn and the pie rule is still available,
         // it must be disabled because the player elected to place a stone rather
         // than swapping colours.  According to the pie rule, White has one
-        // opportunity on her first turn to switch sides【215399881283417†L33-L36】; once she
+        // opportunity on her first turn to switch sides; once she
         // chooses to play normally, that option vanishes.
         if (player == Stone.WHITE && state.isPieRuleAvailable()) {
             state.turnOffPieRule();

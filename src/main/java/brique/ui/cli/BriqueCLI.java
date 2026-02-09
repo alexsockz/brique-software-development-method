@@ -1,7 +1,10 @@
-package brique.ui;
+package brique.ui.cli;
 
 import brique.core.Position;
 import brique.core.Stone;
+import brique.exceptions.*;
+import brique.ui.BoardRendererInterface;
+import brique.ui.IOHandlerInterface;
 import brique.core.GameEngine;
 
 public class BriqueCLI {
@@ -23,16 +26,18 @@ public class BriqueCLI {
 
     public BriqueCLI(IOHandlerInterface io, BoardRendererInterface renderer) {
         int size = 11;
-        System.out.println("Welcome to Brique! please enter board size:");
+        io.writeLine("Welcome to Brique! please enter board size:");
         String input = io.readLine();
-        if (input != null && input.isEmpty()) {
+        if (input != null && !input.isEmpty()) {
             try {
                 size = Integer.parseInt(input);
-                
-                if(size<=0){throw new NumberFormatException("non positive num");}
+
+                if (size <= 0) {
+                    throw new NumberFormatException("non positive num");
+                }
 
             } catch (NumberFormatException e) {
-                System.out.println("Invalid board size provided; using default size of 11.");
+                io.writeLine("Invalid board size provided; using default size of 11.");
             }
         }
         this.engine = new GameEngine(size);
@@ -43,9 +48,12 @@ public class BriqueCLI {
 
     public void start() {
         running = true;
+        String input;
+        String[] parts;
         while (running && !engine.isGameOver()) {
             // Show the current state of the board
             io.writeLine(renderer.render(engine.getState().getBoard()));
+
             // Prompt the user for action
             Stone current = engine.getState().getCurrentPlayer();
             if (current == Stone.WHITE && engine.getState().isPieRuleAvailable()) {
@@ -55,51 +63,28 @@ public class BriqueCLI {
                 io.writeLine("Current player: " + current);
                 io.writeLine("Enter move as 'row col', or 'quit' to exit:");
             }
-            String input = io.readLine();
-            if (input == null) {
-                // Input stream closed; abort game
-                engine.getState().abort();
-                break;
-            }
-            input = input.trim();
-            if (input.equalsIgnoreCase("quit")) {
-                engine.getState().abort();
-                break;
-            }
-            if (input.equalsIgnoreCase("swap")) {
-                try {
-                    engine.getState().applyPieRule();
-                } catch (Exception e) {
-                    io.writeLine("Cannot apply pie rule: " + e.getMessage());
-                }
-                continue;
-            }
-            if (input.isEmpty()) {
-                io.writeLine("No input detected. Please enter a command.");
-                continue;
-            }
-            // Parse row and column
-            String[] parts = input.split("\\s+");
-            if (parts.length != 2) {
-                io.writeLine("Invalid input. Please enter row and column separated by space.");
-                continue;
-            }
+            input = io.readLine();
+
             try {
+                parts = checkInput(input);
                 int row = Integer.parseInt(parts[0]);
                 int col = Integer.parseInt(parts[1]);
                 // Send move to engine
                 boolean moveResult;
-                try {
-                    moveResult = engine.playMove(new Position(row, col));
-                } catch (IllegalStateException e) {
-                    io.writeLine("Game is over: " + e.getMessage());
-                    break;
-                }
+                moveResult = engine.playMove(new Position(row, col));
                 if (!moveResult) {
                     io.writeLine("Invalid move. Try again.");
                 }
-            } catch (NumberFormatException nfe) {
+            } catch (AbortGame | IllegalStateException e) {
+                engine.getState().abort();
+                io.writeLine("Game is over: " + e.getMessage());
+                break;
+            }
+            catch (NumberFormatException nfe) {
                 io.writeLine("Invalid numbers. Please enter numeric row and column.");
+            }
+            catch (SkipTurn e) {
+                io.writeLine(e.getMessage());
             }
         }
         concludeGame();
@@ -117,5 +102,37 @@ public class BriqueCLI {
             }
         }
         running = false;
+    }
+
+    private String[] checkInput(String input) throws AbortGame {
+
+        if (input == null) {
+            // Input stream closed; abort game
+            throw new AbortGame("input stream closed");
+        }
+        input = input.trim();
+        if (input.equalsIgnoreCase("quit")) {
+
+            throw new AbortGame("quit the game");
+        }
+        if (input.equalsIgnoreCase("swap")) {
+            String message="pie rule applied";
+            try {
+                engine.getState().applyPieRule();
+            } catch (Exception e) {
+                message="Cannot apply pie rule: " + e.getMessage();
+            }
+            throw new SkipTurn(message);
+        }
+        if (input.isEmpty()) {
+            
+            throw new SkipTurn("No input detected. Please enter a command.");
+        }
+        // Parse row and column
+        String[] parts = input.split("\\s+");
+        if (parts.length != 2) {
+            throw new SkipTurn("Invalid input. Please enter row and column separated by space.");
+        }
+        return parts;
     }
 }

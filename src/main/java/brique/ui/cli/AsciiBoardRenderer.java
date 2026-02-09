@@ -1,8 +1,9 @@
-package brique.ui;
+package brique.ui.cli;
 
 import brique.core.Board;
 import brique.core.Position;
 import brique.core.Stone;
+import brique.ui.BoardRendererInterface;
 
 public class AsciiBoardRenderer implements BoardRendererInterface {
     @Override
