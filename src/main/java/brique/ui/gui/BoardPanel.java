@@ -431,7 +431,7 @@ public class BoardPanel extends JPanel {
                 if (stone == Stone.BLACK) {
                     g2.setPaint(new GradientPaint(
                         x, y, theme.getBlackStoneHighlight(),
-                        x + size, y + size, theme.getBlackStone()));
+                        ((float)x) + size, ((float)y) + size, theme.getBlackStone()));
                     g2.fill(shape);
                     // Set the border color for the black stone
                     g2.setColor(theme.getBlackStoneBorder());

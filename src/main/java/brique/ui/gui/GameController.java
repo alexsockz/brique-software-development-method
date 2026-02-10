@@ -16,8 +16,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.management.RuntimeErrorException;
-
 // Controller class that manages the game logic and state updates.
 // It runs the game loop on a background thread and communicates with the GUI through the GameStateObserver interface. 
 // It processes user input (moves, swap, quit) and updates the game state accordingly, 
@@ -50,7 +48,7 @@ public class GameController {
 
     // Thread-safe method for submitting user input (cell clicks, "swap", "quit") from the UI thread.
     public void submitInput(String input) {
-        inputQueue.offer(input);
+        if(!inputQueue.offer(input)){throw new RuntimeException("input queue error");};
     }
 
     // --- Game lifecycle ---------------------------------------
