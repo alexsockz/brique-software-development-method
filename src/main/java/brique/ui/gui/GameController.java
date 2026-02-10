@@ -4,7 +4,6 @@ import brique.core.GameEngine;
 import brique.core.GameEngineFactory;
 import brique.core.GameMode;
 import brique.core.GameState;
-import brique.core.LocalGameEngine;
 import brique.core.Move;
 import brique.core.Position;
 import brique.core.Stone;
@@ -16,6 +15,8 @@ import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import javax.management.RuntimeErrorException;
 
 // Controller class that manages the game logic and state updates.
 // It runs the game loop on a background thread and communicates with the GUI through the GameStateObserver interface. 
@@ -72,7 +73,7 @@ public class GameController {
 
         if (!running) return; // If the game is not running, no need to stop
         running = false; // Set the running flag to false to signal the game loop to stop
-        inputQueue.offer("quit"); // unblock the reading thread
+        if(!inputQueue.offer("quit")){ throw new RuntimeException("input queue fails");}; // unblock the reading thread
 
         if (gameThread != null) { // Interrupt the game thread to ensure it stops promptly
             gameThread.interrupt();

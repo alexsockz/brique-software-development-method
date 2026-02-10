@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class StonePreviewPanel extends JPanel {
 
-    private final BoardTheme theme; // Reference to the theme for consistent colouring
+    private transient final BoardTheme theme; // Reference to the theme for consistent colouring
     private Stone currentPlayer = Stone.BLACK; // Default to Black, as they always start
 
     public StonePreviewPanel(BoardTheme theme) {

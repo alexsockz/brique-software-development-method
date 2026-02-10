@@ -10,8 +10,8 @@ import java.util.Set;
 
 public class BriqueGameView extends JPanel implements GameStateObserver {
 
-    private final GameController controller;
-    private final BoardTheme theme;
+    private transient final GameController controller;
+    private transient final BoardTheme theme;
 
     // UI components
     private final BoardPanel boardPanel;
@@ -25,9 +25,9 @@ public class BriqueGameView extends JPanel implements GameStateObserver {
 
     private int currentBoardSize = 11;
 
-    private Runnable newGameAction = () -> { };
+    private transient Runnable newGameAction = () -> { };
 
-    private Runnable quitAction = () -> { };
+    private transient Runnable quitAction = () -> { };
 
     public BriqueGameView(GameController controller, BoardTheme theme) {
         this.controller = controller;
