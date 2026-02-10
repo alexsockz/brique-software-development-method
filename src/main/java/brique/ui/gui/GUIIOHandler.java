@@ -10,6 +10,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class GUIIOHandler implements IOHandlerInterface {
 
     private final JTextArea logArea;
+
     private final BlockingQueue<String> inputQueue;
 
     public GUIIOHandler(JTextArea logArea) {
@@ -20,8 +21,10 @@ public class GUIIOHandler implements IOHandlerInterface {
     @Override
     public String readLine() {
         try {
+            // Blocks until input is submitted from the GUI
             return inputQueue.take();
         } catch (InterruptedException e) {
+            // Restore interrupt flag and return null on interruption
             Thread.currentThread().interrupt();
             return null;
         }
@@ -31,12 +34,13 @@ public class GUIIOHandler implements IOHandlerInterface {
     public void writeLine(String message) {
         SwingUtilities.invokeLater(() -> {
             logArea.append(message + "\n");
-            // Auto-scroll to bottom
+            // Automatically scroll to the bottom to show latest message
             logArea.setCaretPosition(logArea.getDocument().getLength());
         });
     }
 
     public void submitInput(String input) {
+        // Non-blocking and thread-safe
         inputQueue.offer(input);
     }
 }

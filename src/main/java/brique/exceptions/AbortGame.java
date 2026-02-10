@@ -1,8 +1,9 @@
-
 package brique.exceptions;
 
-public class AbortGame extends RuntimeException{
-    
+// Exception used to immediately terminate the current game.
+// Typically thrown when the user quits or when input is no longer available.
+public class AbortGame extends RuntimeException {
+
     public AbortGame() {
         super();
     }

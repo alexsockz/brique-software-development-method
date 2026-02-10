@@ -3,9 +3,12 @@ package brique.ui.gui;
 import brique.core.Stone;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Set;
 
 public class BriqueGUI extends JFrame {
 
@@ -13,11 +16,11 @@ public class BriqueGUI extends JFrame {
     private final BriqueGameView gameView;
 
     public BriqueGUI(GameController controller, BoardTheme theme) {
-        super("Brique \u2014 Board Game");
+        super("Brique — Board Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        this.controller = controller;
-        this.gameView   = new BriqueGameView(controller, theme);
+        this.controller = controller; // Injected controller dependency
+        this.gameView   = new BriqueGameView(controller, theme); 
 
         setContentPane(gameView);
 
@@ -68,12 +71,15 @@ public class BriqueGUI extends JFrame {
     }
 
     public void promptAndStartGame() {
+
         String input = JOptionPane.showInputDialog(
-            this, "Enter board size (3\u201319):", "New Game",
+            this, "Enter board size (3–19):", "New Game", // Prompt for board size
             JOptionPane.QUESTION_MESSAGE);
 
-        int size = 11;
-        if (input != null && !input.trim().isEmpty()) {
+        
+        int size = 11; // default size
+
+        if (input != null && !input.trim().isEmpty()) { // Validate input
             try {
                 size = Integer.parseInt(input.trim());
                 if (size < 3)  size = 3;
@@ -82,6 +88,6 @@ public class BriqueGUI extends JFrame {
                 gameView.appendToLog("Invalid size; using default 11.");
             }
         }
-        controller.startNewGame(size);
+        controller.startNewGame(size); // Start game with the specified or default size
     }
 }

@@ -38,6 +38,7 @@ public final class BoardTheme {
     private final Color statusForeground;
     private final Color accentColor;
 
+    // Private constructor used by the Builder
     private BoardTheme(Builder b) {
         this.lightSquare        = b.lightSquare;
         this.darkSquare         = b.darkSquare;
