@@ -13,7 +13,7 @@ class GameEngineTest {
 
     @BeforeEach
     void setUp() {
-        engine = new GameEngine(4); // use a small board for tests
+        engine = new LocalGameEngine(4); // use a small board for tests
     }
 
     @Nested
@@ -80,7 +80,7 @@ class GameEngineTest {
         @DisplayName("Should apply escort rule and fill squares")
         void shouldApplyEscortRuleAndFillSquares() {
             // Arrange: manually occupy escorts of (1,1) on a 3x3 board
-            engine = new GameEngine(3);
+            engine = new LocalGameEngine(3);
             Board board = engine.getState().getBoard();
             // (1,1) is a light square (1+1=2), escorts are (0,1) and (1,0)
             board.setStone(new Position(0, 1), Stone.BLACK);
@@ -100,7 +100,7 @@ class GameEngineTest {
         @DisplayName("Should detect win condition and end game")
         void shouldDetectWinConditionAndEndGame() {
             // Arrange: set up a nearly complete vertical connection for Black on col 0
-            engine = new GameEngine(3);
+            engine = new LocalGameEngine(3);
             Board board = engine.getState().getBoard();
             // occupy rows 1 and 2 in col 0 with black stones
             board.setStone(new Position(1, 0), Stone.BLACK);

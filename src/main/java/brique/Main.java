@@ -2,16 +2,13 @@ package brique;
 
 import brique.ui.cli.BriqueCLI;
 import brique.ui.gui.BoardTheme;
-import brique.ui.gui.BriqueGUI;
-import brique.ui.gui.GameController;
+import brique.ui.gui.MainMenuScreen;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 public final class Main {
-    private Main() {
-        // prevent instantiation
-    }
+    private Main() { }
 
     public static void main(String[] args) {
         if (args != null && args.length > 0 && args[0].equalsIgnoreCase("cli")) {
@@ -24,13 +21,9 @@ public final class Main {
                         UIManager.getSystemLookAndFeelClassName());
                 } catch (Exception ignored) { }
 
-                // Composition root: wire dependencies
-                BoardTheme theme          = BoardTheme.defaultTheme();
-                GameController controller = new GameController();
-                BriqueGUI gui             = new BriqueGUI(controller, theme);
-
-                gui.setVisible(true);
-                gui.promptAndStartGame();
+                BoardTheme theme = BoardTheme.defaultTheme();
+                MainMenuScreen menu = new MainMenuScreen(theme);
+                menu.setVisible(true);
             });
         }
     }

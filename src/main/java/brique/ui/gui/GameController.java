@@ -1,7 +1,10 @@
 package brique.ui.gui;
 
 import brique.core.GameEngine;
+import brique.core.GameEngineFactory;
+import brique.core.GameMode;
 import brique.core.GameState;
+import brique.core.LocalGameEngine;
 import brique.core.Move;
 import brique.core.Position;
 import brique.core.Stone;
@@ -17,10 +20,15 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class GameController {
 
     private GameEngine engine;
+    private GameMode currentMode = GameMode.LOCAL_1V1;
     private final List<GameStateObserver> observers = new CopyOnWriteArrayList<>();
     private final BlockingQueue<String> inputQueue = new LinkedBlockingQueue<>();
     private Thread gameThread;
     private volatile boolean running;
+
+    public void setGameMode(GameMode mode) { this.currentMode = mode; }
+
+    public GameMode getGameMode() { return currentMode; }
 
     // --- Observer management ----------------------------------
 
@@ -42,7 +50,7 @@ public class GameController {
 
     public void startNewGame(int boardSize) {
         stopGame();
-        engine = new GameEngine(boardSize);
+        engine = GameEngineFactory.create(currentMode, boardSize);
         running = true;
         inputQueue.clear();
 
