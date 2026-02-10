@@ -5,65 +5,80 @@ import brique.rules.RuleType;
 import brique.rules.RulesFactory;
 
 public class GameEngine {
+
+    // Holds the mutable state of the game (board, turn, history, winner)
     private final GameState state;
+
+    // Strategy object encapsulating the active rule set
     private final GameRules rules;
 
     public GameEngine(int boardSize) {
+
+        // Delegate to the configurable constructor with default rules
         this(boardSize, RuleType.STANDARD);
     }
 
     public GameEngine(int boardSize, RuleType ruleType) {
+
+        // Initialize the game state with an empty board
         this.state = new GameState(boardSize);
+
+        // Create the appropriate rules strategy via the factory
         this.rules = RulesFactory.createRules(ruleType);
     }
 
     public GameState getState() {
+
+        // Expose state for read-only use by UI and controllers
         return state;
     }
 
     public boolean playMove(Position position) {
+
+        // Prevent moves after the game has ended
         if (!state.isInProgress()) {
             throw new IllegalStateException("Cannot play a move after the game has ended");
         }
 
+        // Determine the current player
         Stone player = state.getCurrentPlayer();
+
+        // Create a move object combining position and player
         Move move = new Move(position, player);
 
-        // Validate the move using the strategy; invalid moves are refused
+        // Validate the move using the active rule strategy
         if (!rules.isValidMove(state, move)) {
-            return false;
+            return false; // Illegal move, state unchanged
         }
 
-        // Delegate processing to the rule implementation.  This call will
-        // mutate the board and annotate the move with captured and filled
-        // positions as per the escort rule.
+        // Apply the move effects (stone placement, captures, fillings, etc.)
         rules.processMove(state, move);
 
-        // Record the move in the state for history tracking
+        // Store the move in the game history
         state.recordMove(move);
 
-        // Check if the current player has won by connecting their edges.
+        // Check whether this move causes the current player to win
         if (rules.checkWinCondition(state, player)) {
+
+            // Mark the game as won by the current player
             state.declareWinner(player);
             return true;
         }
 
-        // If the move was White's first turn and the pie rule is still available,
-        // it must be disabled because the player elected to place a stone rather
-        // than swapping colours.  According to the pie rule, White has one
-        // opportunity on her first turn to switch sides; once she
-        // chooses to play normally, that option vanishes.
+        // Disable the pie rule if White plays a stone instead of swapping
         if (player == Stone.WHITE && state.isPieRuleAvailable()) {
             state.turnOffPieRule();
         }
 
-        // Advance to the next player's turn
+        // Switch to the other player's turn
         state.switchPlayer();
 
         return true;
     }
 
     public boolean isGameOver() {
+
+        // Game is over when it is no longer in progress
         return !state.isInProgress();
     }
 }
