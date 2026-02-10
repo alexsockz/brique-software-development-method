@@ -31,7 +31,7 @@ jobs:
 
       # Step 4: Set up Gradle (caches dependencies)
       - name: Set up Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v4
 
       # Step 5: Run tests and generate JaCoCo report
       - name: Run tests with coverage
@@ -86,7 +86,7 @@ jobs:
 
       # Step 4: Set up Gradle (caches dependencies)
       - name: Set up Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v4
 
       # Step 5: Run tests only (compiles but doesn't create jar)
       - name: Run tests with coverage

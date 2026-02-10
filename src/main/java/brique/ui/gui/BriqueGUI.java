@@ -3,21 +3,19 @@ package brique.ui.gui;
 import brique.core.Stone;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Set;
 
 public class BriqueGUI extends JFrame {
 
-    private final GameController controller;
+    private transient final GameController controller;
     private final BriqueGameView gameView;
 
     public BriqueGUI(GameController controller, BoardTheme theme) {
         super("Brique — Board Game");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         this.controller = controller; // Injected controller dependency
         this.gameView   = new BriqueGameView(controller, theme); 

@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
 
 public class MainMenuScreen extends JFrame {
 
-    private final BoardTheme theme;
+    private transient final BoardTheme theme;
 
     public MainMenuScreen() {
         this(BoardTheme.defaultTheme());
@@ -19,7 +19,7 @@ public class MainMenuScreen extends JFrame {
     public MainMenuScreen(BoardTheme theme) {
         super("Brique \u2014 Select Game Mode");
         this.theme = theme;
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         setLayout(new BorderLayout());
         add(createTitlePanel(), BorderLayout.NORTH);
@@ -41,12 +41,12 @@ public class MainMenuScreen extends JFrame {
         panel.setBorder(new EmptyBorder(30, 20, 20, 20));
 
         JLabel title = new JLabel("Brique");
-        title.setFont(new Font("SansSerif", Font.BOLD, 42));
+        title.setFont(new Font(theme.getTitleSubtitleFont(), Font.BOLD, 42));
         title.setForeground(theme.getStatusForeground());
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel subtitle = new JLabel("A strategy board game");
-        subtitle.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        subtitle.setFont(new Font(theme.getTitleSubtitleFont(), Font.PLAIN, 16));
         subtitle.setForeground(new Color(180, 175, 165));
         subtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -94,7 +94,7 @@ public class MainMenuScreen extends JFrame {
         panel.setBorder(new EmptyBorder(8, 0, 8, 0));
 
         JLabel label = new JLabel("Select a game mode to begin");
-        label.setFont(new Font("SansSerif", Font.ITALIC, 12));
+        label.setFont(new Font(theme.getTitleSubtitleFont(), Font.ITALIC, 12));
         label.setForeground(new Color(140, 130, 120));
         panel.add(label);
         return panel;
@@ -113,11 +113,11 @@ public class MainMenuScreen extends JFrame {
         card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        titleLabel.setFont(new Font(theme.getTitleSubtitleFont(), Font.BOLD, 16));
         titleLabel.setForeground(Color.WHITE);
 
         JLabel descLabel = new JLabel(description);
-        descLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        descLabel.setFont(new Font(theme.getTitleSubtitleFont(), Font.PLAIN, 12));
         descLabel.setForeground(new Color(255, 255, 255, 200));
 
         card.add(titleLabel, BorderLayout.NORTH);
