@@ -44,6 +44,7 @@ java {
 
 application {
     mainClass = 'brique.Main'
+    applicationName = 'brique'
 }
 
 // Make the JAR executable on double-click
@@ -53,16 +54,17 @@ jar {
             'Main-Class': 'brique.Main'
         )
     }
+    archiveBaseName = 'brique'
 }
 
-// Copy the executable JAR into build/Release
-task release(type: Copy, dependsOn: jar) {
-    from jar.archiveFile
-    into "${buildDir}/Release"
+// Rename distribution archives
+distZip {
+    archiveBaseName = 'brique'
 }
 
-// Wire release task into the build lifecycle
-build.dependsOn release
+distTar {
+    archiveBaseName = 'brique'
+}
 
 // Configure test task to use JUnit 5
 test {
