@@ -1,8 +1,13 @@
-package brique.ui;
+package brique.ui.cli;
 
 import brique.core.GameEngine;
+import brique.core.LocalGameEngine;
 import brique.core.Position;
 import brique.core.Stone;
+import brique.ui.BoardRendererInterface;
+import brique.ui.IOHandlerInterface;
+import brique.ui.cli.BriqueCLI;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayDeque;
@@ -18,7 +23,7 @@ class BriqueCLITest {
     void shouldQuitGracefully() {
         FakeIO io = new FakeIO("quit");
         RecordingRenderer renderer = new RecordingRenderer();
-        GameEngine engine = new GameEngine(3);
+        GameEngine engine = new LocalGameEngine(3);
 
         new BriqueCLI(engine, io, renderer).start();
 
@@ -31,7 +36,7 @@ class BriqueCLITest {
     // void shouldReportInvalidNumbersAndContinue() {
     //     FakeIO io = new FakeIO("abc", "quit");
     //     RecordingRenderer renderer = new RecordingRenderer();
-    //     GameEngine engine = new GameEngine(3);
+    //     GameEngine engine = new LocalGameEngine(3);
 
     //     new BriqueCLI(engine, io, renderer).start();
 
@@ -43,7 +48,7 @@ class BriqueCLITest {
     void shouldPlayValidMoveAndRecordIt() {
         FakeIO io = new FakeIO("0 0", "quit");
         RecordingRenderer renderer = new RecordingRenderer();
-        GameEngine engine = new GameEngine(3);
+        GameEngine engine = new LocalGameEngine(3);
 
         new BriqueCLI(engine, io, renderer).start();
 

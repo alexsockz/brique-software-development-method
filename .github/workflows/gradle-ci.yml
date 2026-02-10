@@ -48,12 +48,19 @@ jobs:
       - name: Build project
         run: ./gradlew clean build
 
-      # Step 8: Upload build artifact
-      - name: Upload build artifact
+      # Step 8: Upload compiled classes
+      - name: Upload classes
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifact
-          path: build/libs/
+          name: classes
+          path: build/classes/
+
+      # Step 9: Upload executable JAR from Release folder
+      - name: Upload Release JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: Release
+          path: build/Release/
 
   # Tests only for alessio o leonardo branch
   test-only:
