@@ -44,6 +44,26 @@ java {
 
 application {
     mainClass = 'brique.Main'
+    applicationName = 'brique'
+}
+
+// Make the JAR executable on double-click
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'brique.Main'
+        )
+    }
+    archiveBaseName = 'brique'
+}
+
+// Rename distribution archives
+distZip {
+    archiveBaseName = 'brique'
+}
+
+distTar {
+    archiveBaseName = 'brique'
 }
 
 // Configure test task to use JUnit 5

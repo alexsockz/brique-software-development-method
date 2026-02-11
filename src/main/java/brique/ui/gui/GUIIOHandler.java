@@ -41,6 +41,6 @@ public class GUIIOHandler implements IOHandlerInterface {
 
     public void submitInput(String input) {
         // Non-blocking and thread-safe
-        inputQueue.offer(input);
+        if(!inputQueue.offer(input)){ throw new RuntimeException("submit input failed");}
     }
 }

@@ -2,17 +2,14 @@ package brique;
 
 import brique.ui.cli.BriqueCLI;
 import brique.ui.gui.BoardTheme;
-import brique.ui.gui.BriqueGUI;
-import brique.ui.gui.GameController;
+import brique.ui.gui.MainMenuScreen;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 // Main entry point of the application. Determines whether to launch the CLI or GUI based on command-line arguments.
 public final class Main {
-    private Main() {
-        // prevent instantiation
-    }
+    private Main() { }
 
     public static void main(String[] args) {
         
@@ -37,15 +34,9 @@ public final class Main {
                     // If setting the look and feel fails, continue with default
                 }
 
-                // Composition root: wire dependencies
-                BoardTheme theme          = BoardTheme.defaultTheme();        // Create the default board theme
-                GameController controller = new GameController();             // Create the game controller
-                BriqueGUI gui             = new BriqueGUI(controller, theme); // Create the GUI with injected dependencies
-
-                // Show the GUI window
-                gui.setVisible(true);
-                // Prompt the user for game settings and start the game
-                gui.promptAndStartGame();
+                BoardTheme theme = BoardTheme.defaultTheme();        // Create the default board theme
+                MainMenuScreen menu = new MainMenuScreen(theme);     //shows the main menu screen to select game mode and therefore the gameEngine
+                menu.setVisible(true);                            // Show the GUI window
             });
         }
     }

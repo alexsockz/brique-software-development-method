@@ -25,16 +25,16 @@ public class BoardPanel extends JPanel {
         void onCellClicked(int row, int col);
     }
 
-    private GameState gameState; // The current game state, which contains the board and other relevant information
+    private transient GameState gameState; // The current game state, which contains the board and other relevant information
     private int boardSize; // The size of the board (number of rows/columns), derived from the game state for layout calculations
-    private Position hoveredCell; // The cell currently hovered by the mouse, used for hover effects in the UI
+    private transient Position hoveredCell; // The cell currently hovered by the mouse, used for hover effects in the UI
     private Stone currentPlayer = Stone.BLACK; // The current player, used for hover preview and other UI elements that depend on whose turn it is
-    private Position lastMovePosition; // The position of the last move played, used to highlight the most recent move on the board
+    private transient Position lastMovePosition; // The position of the last move played, used to highlight the most recent move on the board
     private final Set<Position> lastFilledPositions  = new HashSet<>(); // The set of positions that were filled as a result of the last move, used to highlight these positions on the board
     private final Set<Position> lastCapturedPositions = new HashSet<>(); // The set of positions that were captured as a result of the last move, used to highlight these positions on the board
     private final List<CellClickListener> listeners = new ArrayList<>(); // List of listeners that will be notified when a cell is clicked, allowing the controller to react to user input
 
-    private final BoardTheme theme; // The theme used for rendering the board, which provides colors and styles for various elements of the board and stones
+    private transient final BoardTheme theme; // The theme used for rendering the board, which provides colors and styles for various elements of the board and stones
 
     private static final int MARGIN       = 40; // Margin around the grid for labels and edge indicators
     private static final int LABEL_MARGIN = 25; // Additional margin for labels to prevent overlap with the grid
@@ -375,7 +375,7 @@ public class BoardPanel extends JPanel {
         // Calculate the font size for the labels based on the cell size, 
         // ensuring that the labels are large enough to be readable but also fit well within the layout of the board, 
         // and use a bold sans-serif font for better visibility and aesthetics
-        Font font = new Font("SansSerif", Font.BOLD, Math.max(10, cs / 3));
+        Font font = new Font(theme.getTitleSubtitleFont(), Font.BOLD, Math.max(10, cs / 3));
 
         // Set the font for the labels to the calculated font, 
         // which will be used to draw the row and column labels around the grid 
@@ -431,7 +431,7 @@ public class BoardPanel extends JPanel {
                 if (stone == Stone.BLACK) {
                     g2.setPaint(new GradientPaint(
                         x, y, theme.getBlackStoneHighlight(),
-                        x + size, y + size, theme.getBlackStone()));
+                        ((float)x) + size, ((float)y) + size, theme.getBlackStone()));
                     g2.fill(shape);
                     // Set the border color for the black stone
                     g2.setColor(theme.getBlackStoneBorder());
@@ -439,7 +439,7 @@ public class BoardPanel extends JPanel {
                     // Render white stones with a gradient from light to highlight color
                     g2.setPaint(new GradientPaint(
                         x, y, theme.getWhiteStone(),
-                        x + size, y + size, theme.getWhiteStoneHighlight()));
+                        ((float)x) + size, ((float)y) + size, theme.getWhiteStoneHighlight()));
                     g2.fill(shape);
                     // Set the border color and style for the white stone
                     g2.setColor(theme.getWhiteStoneBorder());

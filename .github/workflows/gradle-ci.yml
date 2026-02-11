@@ -31,7 +31,7 @@ jobs:
 
       # Step 4: Set up Gradle (caches dependencies)
       - name: Set up Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v4
 
       # Step 5: Run tests and generate JaCoCo report
       - name: Run tests with coverage
@@ -47,13 +47,6 @@ jobs:
       # Step 7: Build the project (only if tests pass)
       - name: Build project
         run: ./gradlew clean build
-
-      # Step 8: Upload build artifact
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifact
-          path: build/libs/
 
   # Tests only for alessio o leonardo branch
   test-only:
@@ -79,7 +72,7 @@ jobs:
 
       # Step 4: Set up Gradle (caches dependencies)
       - name: Set up Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v4
 
       # Step 5: Run tests only (compiles but doesn't create jar)
       - name: Run tests with coverage

@@ -6,6 +6,7 @@ import brique.exceptions.*;
 import brique.ui.BoardRendererInterface;
 import brique.ui.IOHandlerInterface;
 import brique.core.GameEngine;
+import brique.core.LocalGameEngine;
 
 public class BriqueCLI {
 
@@ -55,9 +56,8 @@ public class BriqueCLI {
                 io.writeLine("Invalid board size provided; using default size of 11.");
             }
         }
-
         // Create engine with validated board size
-        this.engine = new GameEngine(size);
+        this.engine = new LocalGameEngine(size);
         this.io = io;
         this.renderer = renderer;
         this.running = false;

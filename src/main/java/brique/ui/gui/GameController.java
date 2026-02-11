@@ -1,6 +1,8 @@
 package brique.ui.gui;
 
 import brique.core.GameEngine;
+import brique.core.GameEngineFactory;
+import brique.core.GameMode;
 import brique.core.GameState;
 import brique.core.Move;
 import brique.core.Position;
@@ -22,10 +24,15 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class GameController {
 
     private GameEngine engine; // The core game engine that manages rules and state
+    private GameMode currentMode = GameMode.LOCAL_1V1; //for CLI we are gonna assume just that it is a LOCALTHING
     private final List<GameStateObserver> observers = new CopyOnWriteArrayList<>(); // Thread-safe list of observers to notify about state changes
     private final BlockingQueue<String> inputQueue = new LinkedBlockingQueue<>(); // Queue for receiving user input from the GUI thread
     private Thread gameThread; // Background thread that runs the game loop
     private volatile boolean running; // Flag to control the game loop and ensure thread-safe start/stop of the game
+
+    public void setGameMode(GameMode mode) { this.currentMode = mode; }
+
+    public GameMode getGameMode() { return currentMode; }
 
     // --- Observer management ----------------------------------
 
@@ -41,14 +48,14 @@ public class GameController {
 
     // Thread-safe method for submitting user input (cell clicks, "swap", "quit") from the UI thread.
     public void submitInput(String input) {
-        inputQueue.offer(input);
+        if(!inputQueue.offer(input)){throw new RuntimeException("input queue error");};
     }
 
     // --- Game lifecycle ---------------------------------------
 
     public void startNewGame(int boardSize) {
         stopGame(); // Ensure any existing game is stopped before starting a new one
-        engine = new GameEngine(boardSize); // Create a new game engine with the specified board size
+        engine = GameEngineFactory.create(currentMode, boardSize); // Create a new game engine with the specified board size and depending on the gameplay mode selected
         running = true; // Set the running flag to true to start the game loop
         inputQueue.clear(); // Clear any pending input from previous games
 
@@ -64,7 +71,7 @@ public class GameController {
 
         if (!running) return; // If the game is not running, no need to stop
         running = false; // Set the running flag to false to signal the game loop to stop
-        inputQueue.offer("quit"); // unblock the reading thread
+        if(!inputQueue.offer("quit")){ throw new RuntimeException("input queue fails");}; // unblock the reading thread
 
         if (gameThread != null) { // Interrupt the game thread to ensure it stops promptly
             gameThread.interrupt();

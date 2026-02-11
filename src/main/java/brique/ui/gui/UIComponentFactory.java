@@ -20,7 +20,7 @@ public final class UIComponentFactory {
     public JButton createStyledButton(String text, Color baseColor) {
 
         JButton btn = new JButton(text); // Create a new JButton with the specified text
-        btn.setFont(new Font("SansSerif", Font.BOLD, 12)); // Set a bold sans-serif font for better readability and a modern look
+        btn.setFont(new Font(theme.getTitleSubtitleFont(), Font.BOLD, 12)); // Set a bold sans-serif font for better readability and a modern look
         btn.setForeground(Color.WHITE); // Set the text color to white for good contrast against the base color
         btn.setBackground(baseColor); // Set the background color to the provided base color, which should be a theme color for consistency
         btn.setFocusPainted(false); // Disable the default focus painting to maintain a cleaner look when the button is focused
@@ -50,7 +50,7 @@ public final class UIComponentFactory {
         
         JLabel label = new JLabel(text); // Create a new JLabel with the specified text to display status messages to the user
         
-        label.setFont(new Font("SansSerif", Font.PLAIN, 13)); // Set a plain sans-serif font for clear and unobtrusive status messages
+        label.setFont(new Font(theme.getTitleSubtitleFont(), Font.PLAIN, 13)); // Set a plain sans-serif font for clear and unobtrusive status messages
         
         label.setForeground(new Color(200, 195, 180)); // Set the text color to a light, desaturated color that contrasts well with the status background and fits the overall theme
         
@@ -63,7 +63,7 @@ public final class UIComponentFactory {
 
         JLabel label = new JLabel();
         
-        label.setFont(new Font("SansSerif", Font.BOLD, 14));
+        label.setFont(new Font(theme.getTitleSubtitleFont(), Font.BOLD, 14));
         
         label.setForeground(theme.getStatusForeground());
         
@@ -122,7 +122,7 @@ public final class UIComponentFactory {
                 BorderFactory.createLineBorder(new Color(180, 170, 155)),
                 " Game Log ",
                 TitledBorder.LEFT, TitledBorder.TOP,
-                new Font("SansSerif", Font.PLAIN, 11),
+                new Font(theme.getTitleSubtitleFont(), Font.PLAIN, 11),
                 theme.getAccentColor()
             )
         ));
@@ -203,7 +203,7 @@ public final class UIComponentFactory {
 
     private void addSectionTitle(JPanel panel, String text, int fontSize) {
         JLabel title = new JLabel(text);
-        title.setFont(new Font("SansSerif", Font.BOLD, fontSize));
+        title.setFont(new Font(theme.getTitleSubtitleFont(), Font.BOLD, fontSize));
         title.setForeground(theme.getAccentColor());
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(title);
@@ -216,13 +216,13 @@ public final class UIComponentFactory {
     private void addLegendItem(JPanel panel, String name, String desc,
                                Color color) {
         JLabel nameLabel = new JLabel(name);
-        nameLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
+        nameLabel.setFont(new Font(theme.getTitleSubtitleFont(), Font.BOLD, 12));
         nameLabel.setForeground(color);
         nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(nameLabel);
 
         JLabel descLabel = new JLabel(desc);
-        descLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        descLabel.setFont(new Font(theme.getTitleSubtitleFont(), Font.PLAIN, 11));
         descLabel.setForeground(new Color(100, 90, 80));
         descLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(descLabel);
@@ -235,7 +235,7 @@ public final class UIComponentFactory {
     private void addRuleText(JPanel panel, String text) {
         JLabel label = new JLabel(
             "<html><body style='width:120px'>" + text + "</body></html>");
-        label.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        label.setFont(new Font(theme.getTitleSubtitleFont(), Font.PLAIN, 11));
         label.setForeground(new Color(100, 90, 80));
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(label);

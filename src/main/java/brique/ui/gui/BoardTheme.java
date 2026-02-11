@@ -4,6 +4,8 @@ import java.awt.Color;
 
 public final class BoardTheme {
 
+    // genereal constant
+    private final String titleSubtitleFont;
     // Board squares
     private final Color lightSquare;
     private final Color darkSquare;
@@ -40,6 +42,7 @@ public final class BoardTheme {
 
     // Private constructor used by the Builder
     private BoardTheme(Builder b) {
+        this.titleSubtitleFont  = b.titleSubtitleFont;
         this.lightSquare        = b.lightSquare;
         this.darkSquare         = b.darkSquare;
         this.lightSquareHover   = b.lightSquareHover;
@@ -70,6 +73,7 @@ public final class BoardTheme {
 
     // --- Getters ----------------------------------------------
 
+    public String getTitleSubtitleFont() { return titleSubtitleFont; }
     public Color getLightSquare()        { return lightSquare; }
     public Color getDarkSquare()         { return darkSquare; }
     public Color getLightSquareHover()    { return lightSquareHover; }
@@ -96,6 +100,8 @@ public final class BoardTheme {
     // --- Builder ----------------------------------------------
 
     public static class Builder {
+
+        private String titleSubtitleFont = "SansSerif";
         private Color lightSquare        = new Color(235, 220, 190);
         private Color darkSquare         = new Color(200, 180, 150);
         private Color lightSquareHover   = new Color(210, 235, 200);
@@ -119,6 +125,7 @@ public final class BoardTheme {
         private Color statusForeground   = new Color(240, 235, 220);
         private Color accentColor        = new Color(120, 90, 60);
 
+        public Builder titleSubtitleFont(String f)  { this.titleSubtitleFont = f; return this; }
         public Builder lightSquare(Color c)        { this.lightSquare = c; return this; }
         public Builder darkSquare(Color c)         { this.darkSquare = c; return this; }
         public Builder lightSquareHover(Color c)   { this.lightSquareHover = c; return this; }
