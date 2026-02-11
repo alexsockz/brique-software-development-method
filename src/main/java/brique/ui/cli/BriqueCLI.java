@@ -4,7 +4,6 @@ import brique.core.Position;
 import brique.core.Stone;
 import brique.exceptions.*;
 import brique.ui.BoardRendererInterface;
-import brique.ui.IOHandlerInterface;
 import brique.core.GameEngine;
 import brique.core.LocalGameEngine;
 
@@ -13,7 +12,7 @@ public class BriqueCLI {
     // Core game engine that manages rules and state
     private final GameEngine engine;
     // Abstraction for input/output (console, mock, file, etc.)
-    private final IOHandlerInterface io;
+    private final ConsoleIO io;
     // Responsible for rendering the board in text form
     private final BoardRendererInterface renderer;
     // Controls the lifecycle of the CLI loop (thread-safe)
@@ -25,14 +24,14 @@ public class BriqueCLI {
         this(new ConsoleIO(), new AsciiBoardRenderer());
     }
 
-    public BriqueCLI(GameEngine engine, IOHandlerInterface io, BoardRendererInterface renderer) {
+    public BriqueCLI(GameEngine engine, ConsoleIO io, BoardRendererInterface renderer) {
         this.engine = engine;
         this.io = io;
         this.renderer = renderer;
         this.running = false;
     }
 
-    public BriqueCLI(IOHandlerInterface io, BoardRendererInterface renderer) {
+    public BriqueCLI(ConsoleIO io, BoardRendererInterface renderer) {
 
         // Default board size
         int size = 11;

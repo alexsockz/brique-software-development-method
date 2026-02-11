@@ -1,4 +1,4 @@
-package brique.ui.gui;
+package brique.ui.gui.board;
 
 import java.awt.Color;
 

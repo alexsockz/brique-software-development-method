@@ -5,8 +5,6 @@ import brique.core.LocalGameEngine;
 import brique.core.Position;
 import brique.core.Stone;
 import brique.ui.BoardRendererInterface;
-import brique.ui.IOHandlerInterface;
-import brique.ui.cli.BriqueCLI;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,17 +30,6 @@ class BriqueCLITest {
         assertThat(renderer.renderCount).isGreaterThanOrEqualTo(2); // at least loop + final
     }
 
-    // @Test
-    // void shouldReportInvalidNumbersAndContinue() {
-    //     FakeIO io = new FakeIO("abc", "quit");
-    //     RecordingRenderer renderer = new RecordingRenderer();
-    //     GameEngine engine = new LocalGameEngine(3);
-
-    //     new BriqueCLI(engine, io, renderer).start();
-
-    //     assertThat(io.writes).anyMatch(s -> s.contains("Invalid numbers"));
-    //     assertThat(io.writes).anyMatch(s -> s.contains("Game over. No winner."));
-    // }
 
     @Test
     void shouldPlayValidMoveAndRecordIt() {
@@ -57,7 +44,7 @@ class BriqueCLITest {
         assertThat(renderer.renderCount).isGreaterThanOrEqualTo(2);
     }
 
-    private static final class FakeIO implements IOHandlerInterface {
+    private static final class FakeIO extends ConsoleIO {
         private final Deque<String> inputs = new ArrayDeque<>();
         final List<String> writes = new ArrayList<>();
 

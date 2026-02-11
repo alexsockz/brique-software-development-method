@@ -1,6 +1,8 @@
 package brique.ui.gui;
 
 import brique.core.Stone;
+import brique.ui.gui.board.BoardTheme;
+import brique.ui.gui.controller.GameController;
 
 import javax.swing.*;
 
@@ -10,7 +12,7 @@ import java.awt.event.WindowEvent;
 
 public class BriqueGUI extends JFrame {
 
-    private transient final GameController controller;
+    private final transient GameController controller;
     private final BriqueGameView gameView;
 
     public BriqueGUI(GameController controller, BoardTheme theme) {

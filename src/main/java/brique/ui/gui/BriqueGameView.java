@@ -2,6 +2,9 @@ package brique.ui.gui;
 
 import brique.core.Position;
 import brique.core.Stone;
+import brique.ui.gui.board.BoardPanel;
+import brique.ui.gui.board.BoardTheme;
+import brique.ui.gui.controller.GameController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

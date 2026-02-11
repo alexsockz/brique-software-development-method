@@ -1,13 +1,14 @@
 package brique.ui.gui;
 
 import brique.core.Stone;
+import brique.ui.gui.board.BoardTheme;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class StonePreviewPanel extends JPanel {
 
-    private transient final BoardTheme theme; // Reference to the theme for consistent colouring
+    private final transient  BoardTheme theme; // Reference to the theme for consistent colouring
     private Stone currentPlayer = Stone.BLACK; // Default to Black, as they always start
 
     public StonePreviewPanel(BoardTheme theme) {
@@ -33,8 +34,6 @@ public class StonePreviewPanel extends JPanel {
             g2.setColor(theme.getBlackStone()); // Use the theme's black stone colour for consistency with the board
         } else {
             g2.setColor(theme.getWhiteStone()); // Use the theme's white stone colour for consistency with the board
-            g2.fillOval(2, 2, 20, 20); // Draw a white stone with a grey border to make it visible on the background
-            g2.setColor(new Color(150, 150, 150)); // Set a grey colour for the border of the white stone to enhance visibility against the background
         }
         g2.fillOval(2, 2, 20, 20); // Draw the stone as a filled oval, with a small margin to fit within the panel
         g2.dispose(); // Dispose of the Graphics context to free up resources and avoid memory leaks

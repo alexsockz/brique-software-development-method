@@ -1,6 +1,8 @@
 package brique.ui.gui;
 
 import brique.core.GameMode;
+import brique.ui.gui.board.BoardTheme;
+import brique.ui.gui.controller.GameController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,7 +12,7 @@ import java.awt.event.MouseEvent;
 
 public class MainMenuScreen extends JFrame {
 
-    private transient final BoardTheme theme;
+    private final transient BoardTheme theme;
 
     public MainMenuScreen() {
         this(BoardTheme.defaultTheme());
