@@ -1,7 +1,12 @@
 package brique.ui.gui;
 
+import brique.core.GameState;
 import brique.core.Position;
 import brique.core.Stone;
+import brique.ui.gui.board.BoardPanel;
+import brique.ui.gui.board.BoardTheme;
+import brique.ui.gui.controller.ActionCommand;
+import brique.ui.gui.controller.GameController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,8 +15,8 @@ import java.util.Set;
 
 public class BriqueGameView extends JPanel implements GameStateObserver {
 
-    private transient final GameController controller;
-    private transient final BoardTheme theme;
+    private final transient GameController controller;
+    private final transient BoardTheme theme;
 
     // UI components
     private final BoardPanel boardPanel;
@@ -42,11 +47,11 @@ public class BriqueGameView extends JPanel implements GameStateObserver {
         turnIndicator = factory.createTurnIndicator();
         stonePreview  = factory.createStonePreview();
         swapButton    = factory.createStyledButton(
-                            "\u21C4 Swap (Pie Rule)", new Color(70, 130, 180));
+                    "\u21C4 Swap (Pie Rule)", theme.menu().online());
         newGameButton = factory.createStyledButton(
-                            "\u2726 New Game", new Color(80, 140, 80));
+                    "\u2726 New Game", theme.menu().local());
         quitButton    = factory.createStyledButton(
-                            "\u2715 Quit", new Color(180, 70, 70));
+                    "\u2715 Quit", theme.ui().quitButton());
 
         // Assemble layout
         setLayout(new BorderLayout(0, 0));
@@ -75,7 +80,7 @@ public class BriqueGameView extends JPanel implements GameStateObserver {
 
     private JPanel buildTopPanel(UIComponentFactory factory) {
         JPanel top = new JPanel(new BorderLayout());
-        top.setBackground(theme.getStatusBackground());
+        top.setBackground(theme.backgrounds().statusBg());
         top.setBorder(new EmptyBorder(10, 16, 10, 16));
 
         JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 0));
@@ -94,13 +99,13 @@ public class BriqueGameView extends JPanel implements GameStateObserver {
 
     private JPanel buildCenterPanel(UIComponentFactory factory) {
         JPanel center = new JPanel(new BorderLayout(8, 0));
-        center.setBackground(theme.getBackground());
+        center.setBackground(theme.backgrounds().main());
         center.setBorder(new EmptyBorder(8, 8, 0, 8));
 
         JPanel boardWrapper = new JPanel(new BorderLayout());
-        boardWrapper.setBackground(theme.getPanelBackground());
+        boardWrapper.setBackground(theme.backgrounds().panel());
         boardWrapper.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(180, 170, 155), 1),
+            BorderFactory.createLineBorder(theme.ui().boardBorder(), 1),
             new EmptyBorder(4, 4, 4, 4)
         ));
         boardWrapper.add(boardPanel, BorderLayout.CENTER);
@@ -112,12 +117,12 @@ public class BriqueGameView extends JPanel implements GameStateObserver {
 
     private JPanel buildBottomPanel(UIComponentFactory factory) {
         JPanel bottom = new JPanel(new BorderLayout(0, 0));
-        bottom.setBackground(theme.getBackground());
+        bottom.setBackground(theme.backgrounds().main());
 
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 8));
-        buttons.setBackground(theme.getPanelBackground());
+        buttons.setBackground(theme.backgrounds().panel());
         buttons.setBorder(BorderFactory.createMatteBorder(
-            1, 0, 0, 0, new Color(180, 170, 155)));
+            1, 0, 0, 0, theme.ui().boardBorder()));
         buttons.add(newGameButton);
         buttons.add(swapButton);
         buttons.add(quitButton);
@@ -132,12 +137,12 @@ public class BriqueGameView extends JPanel implements GameStateObserver {
     private void wireListeners() {
         boardPanel.addCellClickListener((row, col) -> {
             if (controller.isRunning()) {
-                controller.submitInput(row + " " + col);
+                controller.submitCommand(new ActionCommand.PlaceStone(row, col));
             }
         });
 
         swapButton.addActionListener(e -> {
-            if (controller.isRunning()) controller.submitInput("swap");
+            if (controller.isRunning()) controller.submitCommand(ActionCommand.Swap.INSTANCE);
         });
 
         newGameButton.addActionListener(e -> {
@@ -146,25 +151,24 @@ public class BriqueGameView extends JPanel implements GameStateObserver {
         });
 
         quitButton.addActionListener(e -> {
-            if (controller.isRunning()) controller.submitInput("quit");
+            if (controller.isRunning()) controller.submitCommand(ActionCommand.Quit.INSTANCE);
             quitAction.run();
         });
     }
 
     // --- GameStateObserver callbacks (from game thread → EDT) -
 
-    @Override
-    public void onGameStarted(int boardSize) {
-        SwingUtilities.invokeLater(() -> {
-            currentBoardSize = boardSize;
-            logArea.setText("");
-            boardPanel.clearHighlights();
-            boardPanel.setGameState(controller.getEngine().getState());
-            appendToLog("=== New Game (" + boardSize + "\u00D7"
-                        + boardSize + ") ===");
-            appendToLog("BLACK plays first. Click a cell to place a stone.");
-        });
-    }
+@Override
+public void onGameStarted(int boardSize, GameState state) {
+    SwingUtilities.invokeLater(() -> {
+        currentBoardSize = boardSize;
+        logArea.setText("");
+        boardPanel.clearHighlights();
+        boardPanel.setGameState(state);  // no more controller.getEngine().getState()
+        appendToLog("=== New Game (" + boardSize + "×" + boardSize + ") ===");
+        appendToLog("BLACK plays first. Click a cell to place a stone.");
+    });
+}
 
     @Override
     public void onBoardUpdated() {

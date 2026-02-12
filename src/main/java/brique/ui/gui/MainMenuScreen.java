@@ -1,6 +1,8 @@
 package brique.ui.gui;
 
 import brique.core.GameMode;
+import brique.ui.gui.board.BoardTheme;
+import brique.ui.gui.controller.GameController;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -8,9 +10,11 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+
 public class MainMenuScreen extends JFrame {
 
-    private transient final BoardTheme theme;
+
+    private final transient BoardTheme theme;
 
     public MainMenuScreen() {
         this(BoardTheme.defaultTheme());
@@ -37,17 +41,18 @@ public class MainMenuScreen extends JFrame {
     private JPanel createTitlePanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(theme.getStatusBackground());
+        panel.setBackground(theme.backgrounds().statusBg());
         panel.setBorder(new EmptyBorder(30, 20, 20, 20));
 
         JLabel title = new JLabel("Brique");
-        title.setFont(new Font(theme.getTitleSubtitleFont(), Font.BOLD, 42));
-        title.setForeground(theme.getStatusForeground());
+        title.setFont(new Font(theme.titleFont(), Font.BOLD, 42));
+        title.setForeground(theme.backgrounds().statusFg());
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel subtitle = new JLabel("A strategy board game");
-        subtitle.setFont(new Font(theme.getTitleSubtitleFont(), Font.PLAIN, 16));
-        subtitle.setForeground(new Color(180, 175, 165));
+
+        subtitle.setFont(new Font(theme.titleFont(), Font.PLAIN, 16));
+        subtitle.setForeground(theme.menu().subtitle());
         subtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         panel.add(title);
@@ -59,29 +64,32 @@ public class MainMenuScreen extends JFrame {
     private JPanel createButtonPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(theme.getBackground());
+        panel.setBackground(theme.backgrounds().main());
         panel.setBorder(new EmptyBorder(30, 80, 10, 80));
+
 
         panel.add(createModeButton(
             "\u265F  1 vs 1 (Local)",
             "Play against a friend on this computer",
-            new Color(80, 140, 80),
+            theme.menu().local(),
             () -> launchGame(GameMode.LOCAL_1V1)));
 
         panel.add(Box.createVerticalStrut(16));
 
+
         panel.add(createModeButton(
             "\uD83C\uDF10  Online",
             "Play against an opponent over the network",
-            new Color(70, 130, 180),
+            theme.menu().online(),
             () -> showComingSoon("Online")));
 
         panel.add(Box.createVerticalStrut(16));
 
+
         panel.add(createModeButton(
             "\uD83E\uDD16  vs Bot",
             "Challenge the computer",
-            new Color(160, 100, 60),
+            theme.menu().bot(),
             () -> showComingSoon("vs Bot")));
 
         panel.add(Box.createVerticalGlue());
@@ -90,12 +98,12 @@ public class MainMenuScreen extends JFrame {
 
     private JPanel createFooterPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panel.setBackground(theme.getPanelBackground());
+        panel.setBackground(theme.backgrounds().panel());
         panel.setBorder(new EmptyBorder(8, 0, 8, 0));
 
         JLabel label = new JLabel("Select a game mode to begin");
-        label.setFont(new Font(theme.getTitleSubtitleFont(), Font.ITALIC, 12));
-        label.setForeground(new Color(140, 130, 120));
+        label.setFont(new Font(theme.titleFont(), Font.ITALIC, 12));
+        label.setForeground(theme.menu().footer());
         panel.add(label);
         return panel;
     }
@@ -113,12 +121,12 @@ public class MainMenuScreen extends JFrame {
         card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(new Font(theme.getTitleSubtitleFont(), Font.BOLD, 16));
+        titleLabel.setFont(new Font(theme.titleFont(), Font.BOLD, 16));
         titleLabel.setForeground(Color.WHITE);
 
         JLabel descLabel = new JLabel(description);
-        descLabel.setFont(new Font(theme.getTitleSubtitleFont(), Font.PLAIN, 12));
-        descLabel.setForeground(new Color(255, 255, 255, 200));
+        descLabel.setFont(new Font(theme.titleFont(), Font.PLAIN, 12));
+        descLabel.setForeground(theme.menu().descLabel());
 
         card.add(titleLabel, BorderLayout.NORTH);
         card.add(descLabel, BorderLayout.SOUTH);
