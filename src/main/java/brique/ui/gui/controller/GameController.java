@@ -3,6 +3,7 @@ package brique.ui.gui.controller;
 import brique.core.GameEngine;
 import brique.core.GameEngineFactory;
 import brique.core.GameMode;
+import brique.core.exceptions.ActionInputException;
 import brique.ui.gui.GameStateObserver;
 
 import java.util.concurrent.BlockingQueue;
@@ -35,7 +36,7 @@ public class GameController {
     // Thread-safe method for submitting user input (cell clicks, "swap", "quit") from the UI thread.
     public void submitCommand(ActionCommand command) {
         if (!inputQueue.offer(command)) {
-            throw new RuntimeException("input queue error");
+            throw new ActionInputException("input queue error");
         }
     }
 
@@ -59,7 +60,7 @@ public class GameController {
     public void stopGame() {
         if (gameLoop == null || !gameLoop.isRunning()) return;
         gameLoop.stop();
-        inputQueue.offer(ActionCommand.Quit.INSTANCE); // unblock
+        if(!inputQueue.offer(ActionCommand.Quit.INSTANCE)){throw new ActionInputException("quit action failed");} // unblock
 
         if (gameThread != null) { // Interrupt the game thread to ensure it stops promptly
             gameThread.interrupt();

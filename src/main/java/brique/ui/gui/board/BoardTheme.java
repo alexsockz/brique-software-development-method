@@ -38,6 +38,14 @@ public final class BoardTheme {
     // --- Grouped fields ---------------------------------------
 
     private final String titleFont;
+    // Font sizes
+    private final int titleFontSize;
+    private final int subtitleFontSize;
+    private final int labelFontSize;
+    private final int descFontSize;
+    private final int buttonFontSize;
+    private final int nameLabelFontSize;
+    private final int smallFontSize;
     private final SquareColors squares;
     private final StoneColors stones;
     private final GridColors grid;
@@ -50,6 +58,13 @@ public final class BoardTheme {
     // Private constructor — assembles groups from flat Builder fields
     private BoardTheme(Builder b) {
         this.titleFont   = b.titleSubtitleFont;
+        this.titleFontSize = b.titleFontSize;
+        this.subtitleFontSize = b.subtitleFontSize;
+        this.labelFontSize = b.labelFontSize;
+        this.descFontSize = b.descFontSize;
+        this.buttonFontSize = b.buttonFontSize;
+        this.nameLabelFontSize = b.nameLabelFontSize;
+        this.smallFontSize = b.smallFontSize;
         this.squares     = new SquareColors(b.lightSquare, b.darkSquare,
                                             b.lightSquareHover, b.darkSquareHover);
         this.stones      = new StoneColors(b.blackStone, b.blackStoneHighlight,
@@ -82,6 +97,13 @@ public final class BoardTheme {
     // --- Grouped accessors ------------------------------------
 
     public String titleFont()              { return titleFont; }
+    public int titleFontSize()             { return titleFontSize; }
+    public int subtitleFontSize()          { return subtitleFontSize; }
+    public int labelFontSize()             { return labelFontSize; }
+    public int descFontSize()              { return descFontSize; }
+    public int buttonFontSize()            { return buttonFontSize; }
+    public int nameLabelFontSize()         { return nameLabelFontSize; }
+    public int smallFontSize()             { return smallFontSize; }
     public SquareColors squares()          { return squares; }
     public StoneColors stones()            { return stones; }
     public GridColors grid()               { return grid; }
@@ -97,6 +119,21 @@ public final class BoardTheme {
 
         // General
         private String titleSubtitleFont        = "SansSerif";
+        // Font sizes (defaults)
+        private int titleFontSize = 42;
+        private int subtitleFontSize = 16;
+        private int labelFontSize = 12;
+        private int descFontSize = 12;
+        private int buttonFontSize = 12;
+        private int nameLabelFontSize = 12;
+        private int smallFontSize = 11;
+    public Builder titleFontSize(int size) { this.titleFontSize = size; return this; }
+    public Builder subtitleFontSize(int size) { this.subtitleFontSize = size; return this; }
+    public Builder labelFontSize(int size) { this.labelFontSize = size; return this; }
+    public Builder descFontSize(int size) { this.descFontSize = size; return this; }
+    public Builder buttonFontSize(int size) { this.buttonFontSize = size; return this; }
+    public Builder nameLabelFontSize(int size) { this.nameLabelFontSize = size; return this; }
+    public Builder smallFontSize(int size) { this.smallFontSize = size; return this; }
 
         // Board squares
         private Color lightSquare               = new Color(235, 220, 190);

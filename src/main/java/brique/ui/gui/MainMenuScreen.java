@@ -45,13 +45,13 @@ public class MainMenuScreen extends JFrame {
         panel.setBorder(new EmptyBorder(30, 20, 20, 20));
 
         JLabel title = new JLabel("Brique");
-        title.setFont(new Font(theme.titleFont(), Font.BOLD, 42));
+        title.setFont(new Font(theme.titleFont(), Font.BOLD, theme.titleFontSize()));
         title.setForeground(theme.backgrounds().statusFg());
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel subtitle = new JLabel("A strategy board game");
 
-        subtitle.setFont(new Font(theme.titleFont(), Font.PLAIN, 16));
+        subtitle.setFont(new Font(theme.titleFont(), Font.PLAIN, theme.subtitleFontSize()));
         subtitle.setForeground(theme.menu().subtitle());
         subtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -102,7 +102,7 @@ public class MainMenuScreen extends JFrame {
         panel.setBorder(new EmptyBorder(8, 0, 8, 0));
 
         JLabel label = new JLabel("Select a game mode to begin");
-        label.setFont(new Font(theme.titleFont(), Font.ITALIC, 12));
+        label.setFont(new Font(theme.titleFont(), Font.ITALIC, theme.labelFontSize()));
         label.setForeground(theme.menu().footer());
         panel.add(label);
         return panel;
@@ -121,11 +121,11 @@ public class MainMenuScreen extends JFrame {
         card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(new Font(theme.titleFont(), Font.BOLD, 16));
+        titleLabel.setFont(new Font(theme.titleFont(), Font.BOLD, theme.subtitleFontSize()));
         titleLabel.setForeground(Color.WHITE);
 
         JLabel descLabel = new JLabel(description);
-        descLabel.setFont(new Font(theme.titleFont(), Font.PLAIN, 12));
+        descLabel.setFont(new Font(theme.titleFont(), Font.PLAIN, theme.descFontSize()));
         descLabel.setForeground(theme.menu().descLabel());
 
         card.add(titleLabel, BorderLayout.NORTH);

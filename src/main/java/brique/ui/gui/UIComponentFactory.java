@@ -23,7 +23,7 @@ public final class UIComponentFactory {
     public JButton createStyledButton(String text, Color baseColor) {
 
         JButton btn = new JButton(text); // Create a new JButton with the specified text
-        btn.setFont(new Font(theme.titleFont(), Font.BOLD, 12));
+        btn.setFont(new Font(theme.titleFont(), Font.BOLD, theme.buttonFontSize()));
         btn.setForeground(Color.WHITE);
         btn.setBackground(baseColor);
         btn.setFocusPainted(false);
@@ -51,7 +51,7 @@ public final class UIComponentFactory {
 
     public JLabel createStatusLabel(String text) { // Create a JLabel for displaying status messages, with styling that matches the overall theme and is suitable for the status bar
         JLabel label = new JLabel(text);
-        label.setFont(new Font(theme.titleFont(), Font.PLAIN, 13));
+        label.setFont(new Font(theme.titleFont(), Font.PLAIN, theme.subtitleFontSize()));
         label.setForeground(theme.ui().statusLabel());
         return label;
     }
@@ -61,7 +61,7 @@ public final class UIComponentFactory {
         // with styling that makes it stand out in the status bar and matches the theme
 
         JLabel label = new JLabel();
-        label.setFont(new Font(theme.titleFont(), Font.BOLD, 14));
+        label.setFont(new Font(theme.titleFont(), Font.BOLD, theme.subtitleFontSize()));
         label.setForeground(theme.backgrounds().statusFg());
         return label;
     }
@@ -83,7 +83,7 @@ public final class UIComponentFactory {
         // with styling that makes it easy to read and fits the overall theme of the application
         JTextArea area = new JTextArea();
         area.setEditable(false);
-        area.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        area.setFont(new Font("Monospaced", Font.PLAIN, theme.labelFontSize()));
         area.setForeground(theme.ui().logText());
         area.setBackground(theme.ui().logBg());
         area.setMargin(new Insets(4, 8, 4, 8));
@@ -103,7 +103,7 @@ public final class UIComponentFactory {
                 BorderFactory.createLineBorder(theme.ui().boardBorder()),
                 " Game Log ",
                 TitledBorder.LEFT, TitledBorder.TOP,
-                new Font(theme.titleFont(), Font.PLAIN, 11),
+                new Font(theme.titleFont(), Font.PLAIN, theme.smallFontSize()),
                 theme.backgrounds().accent()
             )
         ));
@@ -168,13 +168,13 @@ public final class UIComponentFactory {
     private void addLegendItem(JPanel panel, String name, String desc,
                                Color color) {
         JLabel nameLabel = new JLabel(name);
-        nameLabel.setFont(new Font(theme.titleFont(), Font.BOLD, 12));
+        nameLabel.setFont(new Font(theme.titleFont(), Font.BOLD, theme.nameLabelFontSize()));
         nameLabel.setForeground(color);
         nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(nameLabel);
 
         JLabel descLabel = new JLabel(desc);
-        descLabel.setFont(new Font(theme.titleFont(), Font.PLAIN, 11));
+        descLabel.setFont(new Font(theme.titleFont(), Font.PLAIN, theme.smallFontSize()));
         descLabel.setForeground(theme.ui().legendDesc());
         descLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(descLabel);
@@ -187,7 +187,7 @@ public final class UIComponentFactory {
     private void addRuleText(JPanel panel, String text) {
         JLabel label = new JLabel(
             "<html><body style='width:120px'>" + text + "</body></html>");
-        label.setFont(new Font(theme.titleFont(), Font.PLAIN, 11));
+        label.setFont(new Font(theme.titleFont(), Font.PLAIN, theme.smallFontSize()));
         label.setForeground(theme.ui().legendDesc());
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(label);
