@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
-import brique.ui.IOHandlerInterface;
-
-public class ConsoleIO implements IOHandlerInterface {
+public class ConsoleIO {
 
     // Reads text input from the console
     private final BufferedReader reader;
@@ -23,8 +21,7 @@ public class ConsoleIO implements IOHandlerInterface {
         // Auto-flushing writer for immediate console output
         this.writer = new PrintWriter(System.out, true);
     }
-
-    @Override
+ 
     public String readLine() {
 
         try {
@@ -36,7 +33,6 @@ public class ConsoleIO implements IOHandlerInterface {
         }
     }
 
-    @Override
     public void writeLine(String message) {
 
         // Print the message followed by a newline

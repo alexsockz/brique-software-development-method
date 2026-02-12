@@ -1,8 +1,8 @@
 package brique;
 
 import brique.ui.cli.BriqueCLI;
-import brique.ui.gui.BoardTheme;
 import brique.ui.gui.MainMenuScreen;
+import brique.ui.gui.board.BoardTheme;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;

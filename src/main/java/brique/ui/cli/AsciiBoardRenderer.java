@@ -30,7 +30,7 @@ public class AsciiBoardRenderer implements BoardRendererInterface {
             for (int c = 0; c < size; c++) {
 
                 // Retrieve the stone at the current position
-                Stone s = board.getStone(new Position(r, c));
+                Stone s = board.getStone(Position.of(r, c));
 
                 // Map stone types to ASCII characters
                 char ch;

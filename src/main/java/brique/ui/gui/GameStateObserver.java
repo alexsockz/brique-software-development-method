@@ -1,5 +1,6 @@
 package brique.ui.gui;
 
+import brique.core.GameState;
 import brique.core.Position;
 import brique.core.Stone;
 
@@ -7,7 +8,7 @@ import java.util.Set;
 
 public interface GameStateObserver {
 
-    default void onGameStarted(int boardSize) { }
+    default void onGameStarted(int boardSize, GameState state) { }
 
     default void onBoardUpdated() { }
 
