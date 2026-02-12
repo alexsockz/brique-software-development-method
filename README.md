@@ -41,7 +41,10 @@ java -cp build/classes/java/main brique.Main CLI
 
 #### brique.core:
 
-contains the worker classes of the game.
+contains the worker classes of the game, the most important classes are:
+GameEngine: facade interface, let's you choose gameMode, each GameMode is the only way to interact and update a game, following the rules in the rules package.
+
+GameState: state object that is modified by the game engine.
 
 #### brique.exceptions:
 
@@ -49,7 +52,11 @@ personalized exceptions to controll different problems during the game loop.
 
 #### brique.rules:
 
-contains the different possible rules, this allows the implementation of different rulesets in a future.
+contains the different possible rules, this allows the implementation of different rulesets in a future, the most important classes are:
+
+StandardBriqueRulesTest: functional class that processes a move when given by the gameEngine following the basic gameRules.
+
+RulesFactory: created so that if in the future a new rule is to be added it is easely expandable.
 
 #### brique.ui.cli:
 
@@ -57,8 +64,15 @@ contains 3 separate classes to manage the CLI game, with BriqueCLI being the orc
 
 #### brique.ui.gui:
 
-contains all the classes to show the GUI:
+contains all the classes to show the GUI, the most important classes are:
 
 MainMenuScreen: too select the gameMode.
 gives mode to controller -> controller uses GameEngineFactory to switch between game modes -> obtains correct GameEngine for the game mode.
 
+BriqueGUI: main orchestrator of the gui.
+
+GameController (subdivide in multiple classes for better SRP): manages the interactions between the user and the game.
+
+BriqueGameView: on notification from the GameController updates the GUI pieces.
+
+BoardRenderer (subdivide in multiple classes for better SRP): manages the only the board and it's inputs.

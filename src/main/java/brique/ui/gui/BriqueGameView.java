@@ -7,7 +7,6 @@ import brique.ui.gui.board.BoardPanel;
 import brique.ui.gui.board.BoardTheme;
 import brique.ui.gui.controller.ActionCommand;
 import brique.ui.gui.controller.GameController;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -55,7 +54,7 @@ public class BriqueGameView extends JPanel implements GameStateObserver {
 
         // Assemble layout
         setLayout(new BorderLayout(0, 0));
-        add(buildTopPanel(factory), BorderLayout.NORTH);
+        add(buildTopPanel(), BorderLayout.NORTH);
         add(buildCenterPanel(factory), BorderLayout.CENTER);
         add(buildBottomPanel(factory), BorderLayout.SOUTH);
 
@@ -78,7 +77,7 @@ public class BriqueGameView extends JPanel implements GameStateObserver {
 
     // --- Layout construction (pure view assembly) -------------
 
-    private JPanel buildTopPanel(UIComponentFactory factory) {
+    private JPanel buildTopPanel() {
         JPanel top = new JPanel(new BorderLayout());
         top.setBackground(theme.backgrounds().statusBg());
         top.setBorder(new EmptyBorder(10, 16, 10, 16));

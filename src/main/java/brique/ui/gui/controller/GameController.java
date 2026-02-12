@@ -3,7 +3,7 @@ package brique.ui.gui.controller;
 import brique.core.GameEngine;
 import brique.core.GameEngineFactory;
 import brique.core.GameMode;
-import brique.core.exceptions.ActionInputException;
+import brique.exceptions.ActionInputException;
 import brique.ui.gui.GameStateObserver;
 
 import java.util.concurrent.BlockingQueue;
