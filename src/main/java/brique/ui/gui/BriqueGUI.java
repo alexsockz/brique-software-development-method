@@ -2,6 +2,7 @@ package brique.ui.gui;
 
 import brique.core.Stone;
 import brique.ui.gui.board.BoardTheme;
+import brique.ui.gui.controller.ActionCommand;
 import brique.ui.gui.controller.GameController;
 
 import javax.swing.*;
@@ -55,7 +56,7 @@ public class BriqueGUI extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if (controller.isRunning()) controller.submitInput("quit");
+                if (controller.isRunning()) controller.submitCommand(ActionCommand.Quit.INSTANCE);
             }
         });
 

@@ -24,11 +24,11 @@ public class BoardRenderer {
         int gridH = cs * boardSize;
         int t = 5;
 
-        g2.setColor(theme.getEdgeBlack());
+        g2.setColor(theme.edges().black());
         g2.fillRect(ox, oy - t, gridW, t);
         g2.fillRect(ox, oy + gridH, gridW, t);
 
-        g2.setColor(theme.getEdgeWhite());
+        g2.setColor(theme.edges().white());
         g2.fillRect(ox - t, oy, t, gridH);
         g2.fillRect(ox + gridW, oy, t, gridH);
     }
@@ -44,29 +44,29 @@ public class BoardRenderer {
             for (int c = 0; c < boardSize; c++) {
                 int x = ox + c * cs;
                 int y = oy + r * cs;
-                Position pos = new Position(r, c);
+                Position pos = Position.of(r, c);
                 boolean isLight = (r + c) % 2 == 0;
 
                 Color bg;
                 if (hoveredCell != null && hoveredCell.equals(pos)) {
-                    bg = isLight ? theme.getLightSquareHover() : theme.getDarkSquareHover();
+                    bg = isLight ? theme.squares().lightHover() : theme.squares().darkHover();
                 } else {
-                    bg = isLight ? theme.getLightSquare() : theme.getDarkSquare();
+                    bg = isLight ? theme.squares().light() : theme.squares().dark();
                 }
 
                 g2.setColor(bg);
                 g2.fillRect(x, y, cs, cs);
 
                 if (filledPositions.contains(pos)) {
-                    g2.setColor(theme.getFilledHighlight());
+                    g2.setColor(theme.highlights().filled());
                     g2.fillRect(x, y, cs, cs);
                 }
                 if (capturedPositions.contains(pos)) {
-                    g2.setColor(theme.getCapturedHighlight());
+                    g2.setColor(theme.highlights().captured());
                     g2.fillRect(x, y, cs, cs);
                 }
 
-                g2.setColor(theme.getGridLine());
+                g2.setColor(theme.grid().line());
                 g2.drawRect(x, y, cs, cs);
             }
         }
@@ -75,8 +75,8 @@ public class BoardRenderer {
     // --- Row / column labels ----------------------------------
 
     public void drawLabels(Graphics2D g2, int cs, int ox, int oy, int boardSize) {
-        g2.setColor(theme.getLabelColor());
-        Font font = new Font(theme.getTitleSubtitleFont(), Font.BOLD, Math.max(10, cs / 3));
+        g2.setColor(theme.grid().label());
+        Font font = new Font(theme.titleFont(), Font.BOLD, Math.max(10, cs / 3));
         g2.setFont(font);
         FontMetrics fm = g2.getFontMetrics();
 
@@ -106,7 +106,7 @@ public class BoardRenderer {
 
         for (int r = 0; r < boardSize; r++) {
             for (int c = 0; c < boardSize; c++) {
-                Stone stone = board.getStone(new Position(r, c));
+                Stone stone = board.getStone(Position.of(r, c));
                 if (stone == Stone.EMPTY) continue;
 
                 int x = ox + c * cs + margin;
@@ -115,29 +115,29 @@ public class BoardRenderer {
 
                 if (stone == Stone.BLACK) {
                     g2.setPaint(new GradientPaint(
-                        x, y, theme.getBlackStoneHighlight(),
-                        ((float) x) + size, ((float) y) + size, theme.getBlackStone()));
+                        x, y, theme.stones().blackHighlight(),
+                        ((float) x) + size, ((float) y) + size, theme.stones().black()));
                     g2.fill(shape);
-                    g2.setColor(theme.getBlackStoneBorder());
+                    g2.setColor(theme.stones().blackBorder());
                 } else {
                     g2.setPaint(new GradientPaint(
-                        x, y, theme.getWhiteStone(),
-                        ((float) x) + size, ((float) y) + size, theme.getWhiteStoneHighlight()));
+                        x, y, theme.stones().white(),
+                        ((float) x) + size, ((float) y) + size, theme.stones().whiteHighlight()));
                     g2.fill(shape);
-                    g2.setColor(theme.getWhiteStoneBorder());
+                    g2.setColor(theme.stones().whiteBorder());
                     g2.setStroke(new BasicStroke(1.5f));
                     g2.draw(shape);
-                    g2.setColor(new Color(150, 150, 150));
+                    g2.setColor(theme.stones().shadow());
                 }
 
                 g2.setStroke(new BasicStroke(1.5f));
                 g2.draw(shape);
 
                 if (lastMovePosition != null
-                    && lastMovePosition.getRow() == r
-                    && lastMovePosition.getCol() == c) {
+                    && lastMovePosition.row() == r
+                    && lastMovePosition.col() == c) {
                     int dot = Math.max(4, size / 5);
-                    g2.setColor(theme.getLastMoveMarker());
+                    g2.setColor(theme.highlights().lastMove());
                     g2.fillOval(x + (size - dot) / 2,
                                 y + (size - dot) / 2, dot, dot);
                 }
@@ -156,16 +156,16 @@ public class BoardRenderer {
 
         int margin = Math.max(2, cs / 8);
         int size   = cs - 2 * margin;
-        int x = ox + hoveredCell.getCol() * cs + margin;
-        int y = oy + hoveredCell.getRow() * cs + margin;
+        int x = ox + hoveredCell.col() * cs + margin;
+        int y = oy + hoveredCell.row() * cs + margin;
         Ellipse2D.Double shape = new Ellipse2D.Double(x, y, size, size);
 
         g2.setColor(currentPlayer == Stone.BLACK
-            ? new Color(30, 30, 30, 80)
-            : new Color(240, 240, 240, 120));
+            ? theme.stones().blackPreview()
+            : theme.stones().whitePreview());
         g2.fill(shape);
 
-        g2.setColor(new Color(150, 150, 150, 100));
+        g2.setColor(theme.stones().previewBorder());
         g2.setStroke(new BasicStroke(1.0f));
         g2.draw(shape);
     }

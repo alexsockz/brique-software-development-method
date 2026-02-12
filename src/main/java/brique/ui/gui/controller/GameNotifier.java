@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-
 public class GameNotifier {
 
     private final List<GameStateObserver> observers = new CopyOnWriteArrayList<>();
@@ -23,8 +22,8 @@ public class GameNotifier {
         observers.remove(observer);
     }
 
-    public void notifyGameStarted(int boardSize) {
-        for (GameStateObserver o : observers) o.onGameStarted(boardSize);
+    public void notifyGameStarted(int boardSize, GameState state) {
+        for (GameStateObserver o : observers) o.onGameStarted(boardSize, state);
     }
 
     public void notifyBoardUpdated() {

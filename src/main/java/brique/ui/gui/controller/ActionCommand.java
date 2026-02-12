@@ -11,12 +11,12 @@ public abstract class ActionCommand {
         private final Position position;
 
         public PlaceStone(int row, int col) {
-            this.position = new Position(row, col);
+            this.position = Position.of(row, col);
         }
 
         public Position getPosition() { return position; }
-        public int getRow() { return position.getRow(); }
-        public int getCol() { return position.getCol(); }
+        public int getRow() { return position.row(); }
+        public int getCol() { return position.col(); }
     }
 
     

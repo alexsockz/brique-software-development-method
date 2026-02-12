@@ -42,7 +42,7 @@ public class BoardPanel extends JPanel {
     public BoardPanel(BoardTheme theme) {
         Objects.requireNonNull(theme);
         this.renderer = new BoardRenderer(theme);
-        setBackground(theme.getBackground());
+        setBackground(theme.backgrounds().main());
         setPreferredSize(new Dimension(600, 600));
         installMouseHandlers();
     }
@@ -115,7 +115,7 @@ public class BoardPanel extends JPanel {
         Position cell = createTranslator().pixelToCell(x, y);
         if (cell != null) {
             for (CellClickListener l : listeners) {
-                l.onCellClicked(cell.getRow(), cell.getCol());
+                l.onCellClicked(cell.row(), cell.col());
             }
         }
     }

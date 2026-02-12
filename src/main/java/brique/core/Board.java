@@ -36,21 +36,18 @@ public class Board {
 
     public Stone getStone(Position pos) {
 
-        // Direct access to the grid using row and column
-        return grid[pos.getRow()][pos.getCol()];
+        return grid[pos.row()][pos.col()];
     }
 
     public void setStone(Position pos, Stone stone) {
 
-        // Update the grid with the provided stone
-        grid[pos.getRow()][pos.getCol()] = stone;
+        grid[pos.row()][pos.col()] = stone;
     }
 
     public boolean isValidPosition(Position pos) {
 
-        // Ensure row and column are within [0, size)
-        return pos.getRow() >= 0 && pos.getRow() < size &&
-               pos.getCol() >= 0 && pos.getCol() < size;
+        return pos.row() >= 0 && pos.row() < size &&
+               pos.col() >= 0 && pos.col() < size;
     }
 
     public int getSize() {

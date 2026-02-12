@@ -17,7 +17,7 @@ public class StandardBriqueRules implements GameRules {
         LIGHT, DARK;
 
         public static SquareColor at(Position pos) {
-            return (pos.getRow() + pos.getCol()) % 2 == 0 ? LIGHT : DARK;
+            return (pos.row() + pos.col()) % 2 == 0 ? LIGHT : DARK;
         }
     }
 
@@ -74,7 +74,7 @@ public class StandardBriqueRules implements GameRules {
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
 
-                Position pos = new Position(row, col);
+                Position pos = Position.of(row, col);
 
                 // Skip positions already occupied by the current player
                 if (board.getStone(pos) == playerStone) {
@@ -103,21 +103,19 @@ public class StandardBriqueRules implements GameRules {
         List<Position> escorts = new ArrayList<>();
         SquareColor color = SquareColor.at(position);
 
-        int row = position.getRow();
-        int col = position.getCol();
+        int row = position.row();
+        int col = position.col();
 
         if (color == SquareColor.LIGHT) {
-            // LIGHT squares use front (up) and left escorts
-            Position front = new Position(row - 1, col);
-            Position left  = new Position(row, col - 1);
+            Position front = Position.of(row - 1, col);
+            Position left  = Position.of(row, col - 1);
 
             if (board.isValidPosition(front)) escorts.add(front);
             if (board.isValidPosition(left))  escorts.add(left);
 
         } else {
-            // DARK squares use behind (down) and right escorts
-            Position behind = new Position(row + 1, col);
-            Position right  = new Position(row, col + 1);
+            Position behind = Position.of(row + 1, col);
+            Position right  = Position.of(row, col + 1);
 
             if (board.isValidPosition(behind)) escorts.add(behind);
             if (board.isValidPosition(right))  escorts.add(right);
@@ -192,9 +190,9 @@ public class StandardBriqueRules implements GameRules {
         int[][] deltas = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
         for (int[] delta : deltas) {
-            Position neighbor = new Position(
-                pos.getRow() + delta[0],
-                pos.getCol() + delta[1]
+            Position neighbor = Position.of(
+                pos.row() + delta[0],
+                pos.col() + delta[1]
             );
 
             if (board.isValidPosition(neighbor)) {
@@ -208,7 +206,7 @@ public class StandardBriqueRules implements GameRules {
     private List<Position> getTopEdgePositions(int size) {
         List<Position> positions = new ArrayList<>();
         for (int col = 0; col < size; col++) {
-            positions.add(new Position(0, col));
+            positions.add(Position.of(0, col));
         }
         return positions;
     }
@@ -216,7 +214,7 @@ public class StandardBriqueRules implements GameRules {
     private List<Position> getBottomEdgePositions(int size) {
         List<Position> positions = new ArrayList<>();
         for (int col = 0; col < size; col++) {
-            positions.add(new Position(size - 1, col));
+            positions.add(Position.of(size - 1, col));
         }
         return positions;
     }
@@ -224,7 +222,7 @@ public class StandardBriqueRules implements GameRules {
     private List<Position> getLeftEdgePositions(int size) {
         List<Position> positions = new ArrayList<>();
         for (int row = 0; row < size; row++) {
-            positions.add(new Position(row, 0));
+            positions.add(Position.of(row, 0));
         }
         return positions;
     }
@@ -232,7 +230,7 @@ public class StandardBriqueRules implements GameRules {
     private List<Position> getRightEdgePositions(int size) {
         List<Position> positions = new ArrayList<>();
         for (int row = 0; row < size; row++) {
-            positions.add(new Position(row, size - 1));
+            positions.add(Position.of(row, size - 1));
         }
         return positions;
     }

@@ -45,7 +45,7 @@ public class CoordinateTranslator {
         int row = (y - oy) / cellSize;
 
         if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
-            return new Position(row, col);
+            return Position.of(row, col);
         }
         return null;
     }

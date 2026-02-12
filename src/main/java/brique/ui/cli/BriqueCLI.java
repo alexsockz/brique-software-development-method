@@ -1,11 +1,12 @@
 package brique.ui.cli;
 
-import brique.core.Position;
 import brique.core.Stone;
-import brique.exceptions.*;
 import brique.ui.BoardRendererInterface;
+import brique.ui.gui.controller.ActionCommand;
 import brique.core.GameEngine;
-import brique.core.LocalGameEngine;
+import brique.core.GameEngineFactory;
+import brique.core.GameMode;
+
 
 public class BriqueCLI {
 
@@ -32,40 +33,27 @@ public class BriqueCLI {
     }
 
     public BriqueCLI(ConsoleIO io, BoardRendererInterface renderer) {
+    this(promptForEngine(io), io, renderer);  // delegate to full-injection constructor
+}
 
-        // Default board size
-        int size = 11;
-
-        // Ask the user for a board size
+    private static GameEngine promptForEngine(ConsoleIO io) {
         io.writeLine("Welcome to Brique! please enter board size:");
         String input = io.readLine();
-
-        // Try to parse user-provided size
+        int size = 11;
         if (input != null && !input.isEmpty()) {
             try {
-                size = Integer.parseInt(input);
-
-                // Reject non-positive sizes
-                if (size <= 0) {
-                    throw new NumberFormatException("non positive num");
-                }
-
+                size = Integer.parseInt(input.trim());
+                if (size <= 0) size = 11;
             } catch (NumberFormatException e) {
-                // Fall back to default size on invalid input
-                io.writeLine("Invalid board size provided; using default size of 11.");
+                // keep default
             }
         }
-        // Create engine with validated board size
-        this.engine = new LocalGameEngine(size);
-        this.io = io;
-        this.renderer = renderer;
-        this.running = false;
+        return GameEngineFactory.create(GameMode.LOCAL_1V1, size);
     }
 
     public void start() {
         running = true;
         String input;
-        String[] parts;
 
         // Main game loop
         while (running && !engine.isGameOver()) {
@@ -86,33 +74,33 @@ public class BriqueCLI {
             // Read user input
             input = io.readLine();
 
-            try {
-                // Validate and parse input
-                parts = checkInput(input);
-                int row = Integer.parseInt(parts[0]);
-                int col = Integer.parseInt(parts[1]);
-                
-                // Send move to the engine
-                boolean moveResult;
-                moveResult = engine.playMove(new Position(row, col));
-
-                // Inform user if move is illegal
-                if (!moveResult) {
-                    io.writeLine("Invalid move. Try again.");
-                }
-            } catch (AbortGame | IllegalStateException e) {
-                // Game aborted due to quit or fatal error
+            // End-of-stream (e.g. piped input exhausted) → treat as quit
+            if (input == null) {
                 engine.getState().abort();
-                io.writeLine("Game is over: " + e.getMessage());
+                io.writeLine("Input closed. Game aborted.");
                 break;
             }
-            catch (NumberFormatException nfe) {
-                // Row or column was not numeric
-                io.writeLine("Invalid numbers. Please enter numeric row and column.");
-            }
-            catch (SkipTurn e) {
-                // Non-fatal command (swap, empty input, etc.)
-                io.writeLine(e.getMessage());
+
+            ActionCommand cmd = ActionCommand.parse(input);
+
+            if (cmd == null) {
+                io.writeLine("Invalid input. Please enter row and column separated by space.");
+            } else if (cmd instanceof ActionCommand.Quit) {
+                engine.getState().abort();
+                io.writeLine("Game is over: quit the game");
+                break;
+            } else if (cmd instanceof ActionCommand.Swap) {
+                try {
+                    engine.getState().applyPieRule();
+                    io.writeLine("Pie rule applied.");
+                } catch (IllegalStateException e) {
+                    io.writeLine("Cannot apply pie rule: " + e.getMessage());
+                }
+            } else if (cmd instanceof ActionCommand.PlaceStone place) {
+                boolean success = engine.playMove(place.getPosition());
+                if (!success) {
+                    io.writeLine("Invalid move. Try again.");
+                }
             }
         }
         // Handle end-of-game cleanup and messaging
@@ -135,44 +123,5 @@ public class BriqueCLI {
             }
         }
         running = false;
-    }
-
-    private String[] checkInput(String input) throws AbortGame {
-
-        // End game if input stream is closed
-        if (input == null) {
-            throw new AbortGame("input stream closed");
-        }
-
-
-        input = input.trim();
-        
-        // User explicitly quits
-        if (input.equalsIgnoreCase("quit")) {
-            throw new AbortGame("quit the game");
-        }
-
-        // Apply pie rule (swap players)
-        if (input.equalsIgnoreCase("swap")) {
-            String message="pie rule applied";
-            try {
-                engine.getState().applyPieRule();
-            } catch (Exception e) {
-                message="Cannot apply pie rule: " + e.getMessage();
-            }
-            throw new SkipTurn(message);
-        }
-
-        // Ignore empty input
-        if (input.isEmpty()) {
-            throw new SkipTurn("No input detected. Please enter a command.");
-        }
-
-        // Expect exactly two values: row and column
-        String[] parts = input.split("\\s+");
-        if (parts.length != 2) {
-            throw new SkipTurn("Invalid input. Please enter row and column separated by space.");
-        }
-        return parts;
     }
 }
